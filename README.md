@@ -1,143 +1,154 @@
-# Orbital
+<!-- Marketing README. Replace the placeholder links (your-domain.com) with the live Vercel/custom-domain URL after deploy. -->
 
-Advanced website audit platform. Point it at any public URL and it scores the
-page across **Performance, SEO, Accessibility and Security**, then turns the
-findings into a prioritized, fix-ready report — every check has a plain-English
-explanation and the failing ones come with copy-paste before/after code.
+<div align="center">
 
-Built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4 and
-Supabase. Deploys to Vercel.
+<img src="docs/media/hero.jpg" alt="Orbital — know exactly why your site is slow, and what to fix first" width="100%" />
 
-> The marketing site and the guest audit work with **zero configuration** —
-> with no API keys the analyzer serves realistic demo data and the account
-> area stays gated. Add keys to unlock real audits, accounts and billing.
+<h1>Orbital</h1>
 
-## Features
+### Mission control for your website's health.
 
-- **Guest audit** — audit a URL from the landing page, no signup required.
-- **Multi-dimension engine** — Lighthouse metrics (PageSpeed), HTML rule
-  checks, real-world field vitals (CrUX), security headers + live TLS
-  inspection, and Wappalyzer-style tech-stack detection.
-- **AI recommendations** — optional Claude-generated fixes layered on top.
-- **Accounts & dashboard** — projects, audit history, scheduled re-audits,
-  alerts, side-by-side compare/versus, shareable report links, team invites.
-- **Billing** — Stripe subscriptions (Pro / Team).
-- **Public REST API** — `/api/v1/*` for programmatic audits.
-- **Cosmic UI** — three.js + particle backdrops, honoring `prefers-reduced-motion`.
+**Orbital audits any URL in seconds and tells you exactly what to fix first** — scored across Performance, SEO, Accessibility and Security, with every issue explained in plain English and copy-paste code to fix it.
 
-## Tech stack
+<p>
+  <a href="https://your-domain.com"><img src="https://img.shields.io/badge/▶_Visit_Orbital-0B0B0E?style=for-the-badge" alt="Visit Orbital" /></a>
+  <a href="https://your-domain.com/#report"><img src="https://img.shields.io/badge/Run_a_live_audit-1F2937?style=for-the-badge" alt="Live demo" /></a>
+  <a href="https://your-domain.com/pricing"><img src="https://img.shields.io/badge/Pricing-1F2937?style=for-the-badge" alt="Pricing" /></a>
+</p>
 
-| Area | Choice |
-| --- | --- |
-| Framework | Next.js 16 (App Router, Server Actions) |
-| UI | React 19, Tailwind CSS v4, framer-motion, three.js, tsParticles |
-| Auth & DB | Supabase (Postgres + RLS, SSR cookies) |
-| Billing | Stripe |
-| Background jobs | Upstash QStash (scheduled re-audits) |
-| AI | Anthropic SDK (`@anthropic-ai/sdk`) |
+<sub>Built with</sub><br/>
+<img src="https://img.shields.io/badge/Next.js-000?logo=next.js&logoColor=white" />
+<img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/Tailwind_CSS-0B1120?logo=tailwindcss&logoColor=38BDF8" />
+<img src="https://img.shields.io/badge/Supabase-181818?logo=supabase&logoColor=3ECF8E" />
 
-## Getting started
+</div>
 
-### 1. Prerequisites
+---
 
-- Node.js 20+
-- A Supabase project (for auth / dashboard; optional for guest demo)
+## A score tells you where you stand. Orbital tells you what to do next.
 
-### 2. Install
+Most tools hand you a number and a wall of two hundred warnings. Orbital hands you a **ranked plan**: the handful of fixes that actually move your score, each one explained, each one with the exact snippet to paste in.
+
+No signup. No install. Paste a URL, get a full report in seconds.
+
+<div align="center">
+  <img src="docs/media/report-overview.jpg" alt="Orbital audit report — overall score and category breakdown" width="90%" />
+</div>
+
+<!-- TODO: drop in a short GIF of a live audit running (loader → report) here when you have a screen recording. -->
+
+## Not just *what's* wrong — the exact fix
+
+Every check expands into a full explanation: what it checks, what it found on your page, why it matters, and a **before / after code block you can copy straight into your project.** Even passing checks tell you what you're doing right.
+
+<div align="center">
+  <img src="docs/media/report-fix.jpg" alt="A check expanded to show the problem and a copy-paste before/after code fix" width="90%" />
+</div>
+
+## Everything you get
+
+| | |
+|---|---|
+| 🎯 **One honest number** | A 0–100 score across Performance, SEO, Accessibility and Security — plus the breakdown behind it. |
+| 🧭 **A ranked fix list** | Issues ordered by the points each fix returns, not severity noise. No 200-warning dumps. |
+| 💻 **Copy-paste fixes** | Real before/after code for every finding — paste it and move on. |
+| ⚡ **Real Core Web Vitals** | Lab metrics plus real-world field data (CrUX) from actual Chrome users. |
+| 🔒 **Security & TLS** | Live certificate inspection, security-header checks and HTTPS validation. |
+| 🧱 **Tech-stack detection** | See the frameworks, CDNs and analytics a site runs on. |
+| 📈 **Track over time** | Every run saved — watch scores climb and catch regressions. |
+| ⚔️ **Benchmark competitors** | Audit any rival URL and compare side by side. |
+| ⏱️ **Scheduled audits & alerts** | Re-audit on a schedule; get pinged when a score drops. |
+| 👥 **Teams, API & sharing** | Team seats, a public REST API, and shareable report links. |
+
+## Watch your scores climb
+
+Orbital saves every run, so you can see progress over time and catch regressions the moment they land — complete with per-category deltas.
+
+<div align="center">
+  <img src="docs/media/project-history.jpg" alt="Project run history with score deltas over time" width="90%" />
+</div>
+
+<!-- TODO: a GIF scrolling through a report or expanding checks works great here. -->
+
+## Beat your competition
+
+Point Orbital at a competitor's URL and compare runs side by side — what you fixed, what regressed, and where you still trail, across every category.
+
+<div align="center">
+  <img src="docs/media/compare.jpg" alt="Side-by-side comparison of two audit runs with category radar and diff" width="90%" />
+</div>
+
+## A home base for your whole team
+
+Projects, history, scheduled re-audits, alerts, billing and an API — all in one calm, fast dashboard.
+
+<div align="center">
+  <img src="docs/media/dashboard.jpg" alt="Orbital dashboard — projects and scores at a glance" width="90%" />
+</div>
+
+## Try it in one click — no signup
+
+Paste a URL on the landing page and watch the real pipeline run. The guest audit uses the exact same engine as paid plans.
+
+<div align="center">
+  <img src="docs/media/live-demo.jpg" alt="Run an audit right from the landing page" width="78%" />
+  &nbsp;
+  <img src="docs/media/mobile-hero.jpg" alt="Orbital on mobile" width="18%" />
+</div>
+
+<div align="right"><sub>Looks great on every screen ↑</sub></div>
+
+## Simple, honest pricing
+
+Every plan runs the **same** 40+ checks — you pay for history, automation and seats, never for a better score.
+
+| | Free | Pro | Team |
+|---|---|---|---|
+| **Price** | $0 forever | $29 / mo | $99 / mo |
+| Audits / month | 25 | 2,000 | Unlimited |
+| URLs tracked | 1 | 25 | Unlimited |
+| Run history | 7 days | 1 year | Unlimited |
+| Scheduled re-audits | — | Daily | Hourly |
+| Team seats | 1 | 3 | Unlimited |
+| Slack & webhook alerts | — | ✓ | ✓ |
+| Public REST API | — | ✓ | ✓ |
+
+<div align="center">
+  <img src="docs/media/pricing.jpg" alt="Orbital pricing — Free, Pro and Team plans" width="90%" />
+</div>
+
+## Get started
+
+<div align="center">
+
+### Audit your site in the next 10 seconds — free, no signup.
+
+<a href="https://your-domain.com"><img src="https://img.shields.io/badge/▶_Audit_my_site-0B0B0E?style=for-the-badge" alt="Audit my site" /></a>
+
+</div>
+
+---
+
+<details>
+<summary><b>Running Orbital yourself (developers)</b></summary>
+
+<br/>
+
+Orbital is a Next.js 16 app. It runs with **zero config** — with no API keys the guest audit serves realistic demo data; add keys to unlock real audits, accounts and billing.
 
 ```bash
 npm install
+cp .env.example .env.local   # fill in the keys you have (all optional for the demo)
+npm run dev                  # http://localhost:3000
 ```
 
-### 3. Environment
+Accounts and the dashboard are backed by Supabase — apply the SQL in `supabase/migrations/` (in order). Deploys to Vercel out of the box; set the environment variables from `.env.example` in your project settings. See the comments in `.env.example` for what each key unlocks.
 
-```bash
-cp .env.example .env.local
-```
+</details>
 
-Fill in the values you have. Everything is optional for the guest demo; see
-[Environment variables](#environment-variables) for what each key unlocks.
+<div align="center"><sub>Orbital — mission control for your website's health.</sub></div>
 
-### 4. Database (Supabase)
 
-Apply the SQL migrations in `supabase/migrations/` (in order) to your project —
-via the Supabase SQL editor or the Supabase CLI — then optionally run
-`supabase/seed.sql` for sample data.
 
-### 5. Run
-
-```bash
-npm run dev
-```
-
-Open http://localhost:3000.
-
-## Scripts
-
-| Command | Does |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build (what Vercel runs) |
-| `npm run start` | Serve the production build |
-| `npm run lint` | ESLint |
-
-## How analysis works
-
-The engine degrades gracefully based on which keys are present:
-
-1. **URL mode** runs PageSpeed (Lighthouse), CrUX field data, an SSRF-guarded
-   HTTP/TLS inspection, security-header and tech-stack analyzers in parallel.
-2. If `PAGESPEED_API_KEY` is absent, it falls back to HTML rule checks.
-3. If nothing can run, it returns demo data so the UI is always populated.
-4. `ANTHROPIC_API_KEY`, when set, adds AI-written recommendations on top.
-
-Report content (descriptions + fix code) lives in a UI-side catalog
-(`src/lib/analysis/checkDocs.ts`) keyed by stable check id, so reports stay
-small and catalog improvements apply to historical audits retroactively.
-
-## Deploying to Vercel
-
-1. Push this repo to GitHub.
-2. Import it in Vercel — the framework preset is detected automatically
-   (build `next build`, output handled by Vercel). No `vercel.json` needed.
-3. Add the environment variables below in **Project → Settings → Environment
-   Variables**.
-4. Deploy.
-
-### Environment variables
-
-| Variable | Required for | Notes |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Accounts | Public |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Accounts | Public |
-| `SUPABASE_SERVICE_ROLE_KEY` | Accounts | **Server-only secret** |
-| `APP_URL` | OAuth / Stripe / QStash | Your deployed origin, e.g. `https://orbital.vercel.app` |
-| `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` | Server Actions | Set a stable value so encrypted actions survive across Vercel's multiple instances (`openssl rand -base64 32`) |
-| `PAGESPEED_API_KEY` | Real audits | Without it → HTML rules / demo |
-| `CRUX_API_KEY` | Field vitals | Falls back to `PAGESPEED_API_KEY` |
-| `ANTHROPIC_API_KEY` | AI fixes | Optional |
-| `ANALYSIS_MODEL` | AI fixes | Optional override (default `claude-sonnet-5-5`) |
-| `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_TEAM` | Billing | |
-| `QSTASH_TOKEN`, `QSTASH_CURRENT_SIGNING_KEY`, `QSTASH_NEXT_SIGNING_KEY` | Scheduled re-audits | |
-
-After deploying, set each provider's redirect/callback and webhook URLs to your
-`APP_URL` (Supabase OAuth → `/auth/callback`, Stripe webhook → `/api/stripe/webhook`).
-
-## Project structure
-
-```
-src/
-  app/            # routes: (marketing) (auth) (dashboard) api share auth
-  components/     # UI — landing, dashboard, auth, visual (3D), layout
-  lib/            # analysis engine, supabase, billing, queue, dashboard data
-  i18n/           # lightweight context-based i18n (PL default)
-supabase/
-  migrations/     # ordered SQL schema (apply in order)
-  seed.sql        # optional sample data
-```
-
-## Notes
-
-- Real headless-browser audits (screenshots, network waterfall, axe-core) are
-  planned via a **separate** render worker (own deployable with Chromium) — not
-  part of this Next.js app, which Vercel hosts on its own.
