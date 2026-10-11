@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Orbital Audit — Swiss monochrome design system (Tailwind v4)
+   White canvas · pure-ink accent · hairline 1px borders · no glow.
+   Space Grotesk + JetBrains Mono, radii 6–8px, thin lines over
+   shadows. Component styling lives inline as Tailwind utilities;
+   only what can't be expressed as a utility survives below.
+   ============================================================ */
+@theme {
+  /* Powierzchnia */
+  --color-void: #ffffff;
+
+  /* Tekst: hierarchia à la Linear na bieli */
+  --color-ink: #0a0a0a;
+  --color-ink-2: #111111;
+  --color-star: #0a0a0a;
+  --color-gray-1: #444444;
+  --color-muted: #888888;
+  --color-faint: #b0b0b0;
+
+  /* Linie / hairline */
+  --color-line: #e5e5e5;
+  --color-line-2: #f0f0f0;
+  --color-line-strong: #d4d4d4;
+  --color-bg-soft: #fafafa;
+
+  /* Semantyka wyników — stonowana, AA-safe na bieli (pasma Lighthouse) */
+  --color-good: #127a43;
+  --color-good-soft: #ecf5ef;
+  --color-good-line: #cfe6d8;
+  --color-warn: #b45309;
+  --color-warn-soft: #f8f0e3;
+  --color-warn-line: #ecd9bb;
+  --color-bad: #b3261e;
+  --color-bad-soft: #f8eae9;
+  --color-bad-line: #eccecb;
+
+  --font-sans: var(--font-space-grotesk), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+
+  --radius-glass: 8px;
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* ============================================================
+   DARK MODE — negatyw skali neutralnej. Utility Tailwind v4 czytają
+   var(--color-*), więc wystarczy nadpisać tokeny na html.dark, a
+   bg-white / text-ink / border-line / pasma wyników przełączają się
+   same. Klasa dodawana przez inline-skrypt w <head> (bez FOUC) i
+   przełącznik ThemeToggle. `ink` i `white` zamieniają się rolami:
+   ink = jasny pierwszoplan (tekst + odwrócony przycisk), white =
+   ciemna powierzchnia karty. Wartości dobrane pod kontrast AA. */
+html.dark {
+  color-scheme: dark;
+
+  --color-void: #0b0b0e;
+  --color-ink: #f3f3f4;
+  --color-ink-2: #e4e4e6;
+  --color-star: #ececed;
+  --color-white: #16171a;
+  --color-black: #f3f3f4;
+
+  --color-gray-1: #a6a8ad;
+  --color-muted: #83858b;
+  --color-faint: #5a5c62;
+
+  --color-line: #26272c;
+  --color-line-2: #1d1e22;
+  --color-line-strong: #35363c;
+  --color-bg-soft: #141519;
+
+  --color-good: #37d399;
+  --color-good-soft: #0f241c;
+  --color-good-line: #1d3b2e;
+  --color-warn: #eab308;
+  --color-warn-soft: #271f0e;
+  --color-warn-line: #443714;
+  --color-bad: #f2726d;
+  --color-bad-soft: #2a1614;
+  --color-bad-line: #4a2622;
+}
+
+/* Podtrzewo o STAŁEJ palecie jasnej (niezależnej od motywu). Używane
+   przez dekoracyjne, celowo-ciemne sekcje marketingu (terminale kodu,
+   pasmo CTA), które reużywają bg-ink/text-white jako dosłowną czerń/
+   biel — bez tego przy flipie zamieniłyby się w jasne slaby. */
+.theme-fixed {
+  color-scheme: light;
+
+  --color-void: #ffffff;
+  --color-ink: #0a0a0a;
+  --color-ink-2: #111111;
+  --color-star: #0a0a0a;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-gray-1: #444444;
+  --color-muted: #888888;
+  --color-faint: #b0b0b0;
+
+  --color-line: #e5e5e5;
+  --color-line-2: #f0f0f0;
+  --color-line-strong: #d4d4d4;
+  --color-bg-soft: #fafafa;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Kosmiczna baza — głęboka czerń pod globalnym tłem z gwiazdami
+     (SpaceBackground). Ustawiona na <html>, więc nie ma białego
+     błysku zanim zamontuje się warstwa cząsteczek. */
+  background-color: #07070a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  /* Przezroczyste — kosmiczne tło (SpaceBackground, fixed) prześwituje
+     pod całą treścią. Baza czerni jest na <html>. */
+  background-color: transparent;
+  color: var(--color-star);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Nagłówki – krój display, ciasny tracking (Space Grotesk) */
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* Pasek przewijania – dyskretny, tokeny przełączają się z motywem */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--color-void); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 999px;
+  border: 2px solid var(--color-void);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-faint); }
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-void);
+}
+
+/* Widoczny focus dla dostępności (klawiatura). Pola formularzy są
+   wykluczone — mają własny wskaźnik focusa (zmiana koloru obramowania
+   na --color-ink), więc nie potrzebują dodatkowego outline'u. */
+:focus-visible:not(input):not(select):not(textarea) {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Tailwind v4 preflight ustawia dla <button> cursor: default —
+   przywróć wskaźnik dłoni dla aktywnych przycisków. */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+/* ============================================================
+   DARK MODE — poprawka hoveru odwróconych przycisków. Przyciski
+   primary (bg-ink text-white) w dark mode dostają jasne tło i ciemny
+   tekst (odwrócenie), ale ich hover to wartość DOSŁOWNA hover:bg-[#222]
+   (nie token @theme), więc nie flipuje sama. Nadpisujemy ją na lekko
+   przygaszoną biel — lustro jasnego hoveru (ink→#222). Wariant onDark
+   (hover:bg-[#f0f0f0]) występuje wyłącznie w CtaBand przypiętym klasą
+   .theme-fixed, więc jego nie ruszamy. */
+html.dark .hover\:bg-\[\#222\]:hover {
+  background-color: #dcdcde;
+}
+
+/* ============================================================
+   SELECT / dropdown — jeden monochromatyczny styl dla wszystkich
+   <select> w aplikacji (AuditInput, ScheduleEditor, AlertRuleEditor,
+   MemberList, InviteMemberForm). Element <select> ma już utility
+   Tailwind (border-line / rounded / focus:border-ink); tutaj tylko
+   to, czego utility nie wyrażają: własny chevron zamiast natywnego
+   oraz — tam gdzie przeglądarka wspiera `appearance: base-select`
+   (Chromium) — pełne ostylowanie rozwijanej listy (koniec z
+   systemowym niebieskim podświetleniem). Reszta silników dostaje
+   czysty, zamknięty kontrolek z naszym chevronem (progressive
+   enhancement). Kolory z tokenów @theme. */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23444444'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 14px;
+}
+/* [class] podnosi swoistość ponad utility Tailwind (px-3 itp.),
+   żeby zarezerwować miejsce na chevron bez dotykania każdego pliku. */
+select[class] {
+  padding-right: 2.25rem;
+}
+/* Focus: chevron ciemnieje do --color-ink (obramowanie robi focus:border-ink). */
+select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%230a0a0a'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+}
+
+/* Rozwijana lista — tylko przeglądarki z nowym modelem <select>.
+   Tam chevron rysuje ::picker-icon, więc gasimy nasz obrazek tła. */
+@supports (appearance: base-select) {
+  select,
+  ::picker(select) {
+    appearance: base-select;
+  }
+  select {
+    background-image: none;
+  }
+  select:focus {
+    background-image: none;
+  }
+  ::picker(select) {
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    padding: 4px;
+    margin-top: 4px;
+    box-shadow: 0 6px 20px rgba(10, 10, 10, 0.07);
+    font-family: var(--font-sans);
+  }
+  select option {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--color-ink);
+  }
+  /* Kursor / klawiatura → dyskretne wypełnienie zamiast systemowego niebieskiego. */
+  select option:hover,
+  select option:focus {
+    background: var(--color-bg-soft);
+  }
+  /* Aktualnie wybrana opcja — pełny inkowy pasek, spójny z ::selection. */
+  select option:checked {
+    background: var(--color-ink);
+    color: var(--color-void);
+  }
+  /* Domyślny „✓" zbędny — zaznaczenie niesie pasek tła. */
+  select option::checkmark {
+    content: none;
+  }
+  select::picker-icon {
+    color: var(--color-gray-1);
+    transition: transform 0.18s ease;
+  }
+  select:open::picker-icon {
+    transform: rotate(180deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  select::picker-icon {
+    transition: none;
+  }
+}
+
+/* Keyframe dla utili animate-[spin_…] (spinnery w AuditForm / LiveDemo) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Wejście elementów (fade-up) — /pricing. Fill-mode „both" trzyma stan
+   początkowy już przy pierwszym renderze, więc brak migotania mimo delay. */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   RESIDUALNE REGUŁY — jedyne style, których nie da się wyrazić
+   jako utility Tailwind na JSX: pseudo-elementy kciuka suwaka
+   (Simulator) i animowany łuk gauge (ResultsDashboard).
+   Kolory czerpią z tokenów @theme (--color-*).
+   ============================================================ */
+
+/* Score simulator — kciuk range-inputa (Simulator.tsx) */
+.sim-range { -webkit-appearance: none; appearance: none; width: 100%; height: 2px; background: var(--color-line); border-radius: 100px; outline: none; }
+.sim-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--color-ink); cursor: pointer; border: 3px solid var(--color-void); box-shadow: 0 0 0 1px var(--color-ink); }
+.sim-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--color-ink); cursor: pointer; border: 3px solid var(--color-void); box-shadow: 0 0 0 1px var(--color-ink); }
+.sim-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 1px var(--color-ink), 0 0 0 4px rgba(10,10,10,.14); }
+
+/* Dashboard gauge — animowany łuk SVG (ResultsDashboard.tsx) */
+.gauge { position: relative; width: 220px; height: 220px; }
+.gauge svg { width: 220px; height: 220px; transform: rotate(-90deg); }
+.gauge .track { fill: none; stroke: var(--color-line); stroke-width: 10; }
+.gauge .arc { fill: none; stroke: var(--color-ink); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 628.32; stroke-dashoffset: 628.32; transition: stroke-dashoffset 1.1s cubic-bezier(.16,1,.3,1); }
+.gauge.good .arc { stroke: var(--color-good); }
+.gauge.warn .arc { stroke: var(--color-warn); }
+.gauge.poor .arc { stroke: var(--color-bad); }
+@media (prefers-reduced-motion: reduce) {
+  .gauge .arc { transition: none; }
+}
+
+/* ============================================================
+   PRINT — "Save as PDF" for an audit report. Chrome (header, tabs,
+   toolbars) carries `print:hidden`; here we drop margins/animation
+   and keep the monochrome bands + gauge colours so the PDF matches
+   the screen. Nothing here affects the on-screen view.
+   ============================================================ */
+@media print {
+  html { scroll-behavior: auto; }
+  body {
+    overflow: visible;
+    font-size: 12pt;
+    background: #fff;
+  }
+  /* Print the semantic band/gauge colours, don't let the browser
+     strip them for ink saving. */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .gauge .arc { transition: none; }
+  a[href]::after { content: ""; } /* no ugly URL expansion */
+}
+
