@@ -20,6 +20,7 @@ jobs:
       - name: Audit Website Performance & Security
         run: |
           npx orbital-audit "${{ secrets.DEPLOY_URL || 'https://example.com' }}" \
+            --api-url "${{ secrets.ORBITAL_API_URL || 'https://orbital.dev' }}" \
             --fail-under 80 \
             --format markdown \
             --output ./audit-report.md
