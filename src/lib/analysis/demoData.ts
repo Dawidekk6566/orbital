@@ -368,6 +368,85 @@ export function buildDemoReport(targetValue = "https://example.com"): AnalysisRe
         thirdParty: false,
       },
     ],
+    budget: {
+      budgets: [
+        { name: "JavaScript", budgetBytes: 358400, actualBytes: 284500, status: "good", percentUsed: 79 },
+        { name: "CSS", budgetBytes: 61440, actualBytes: 42100, status: "good", percentUsed: 69 },
+        { name: "Images & Media", budgetBytes: 819200, actualBytes: 745000, status: "warn", percentUsed: 91 },
+        { name: "Web Fonts", budgetBytes: 122880, actualBytes: 68400, status: "good", percentUsed: 56 },
+        { name: "Total Transfer", budgetBytes: 1536000, actualBytes: 1140000, status: "good", percentUsed: 74 },
+      ],
+      bloatItems: [
+        {
+          url: "https://example.com/_next/static/chunks/main.js",
+          label: "main.js",
+          totalBytes: 128400,
+          wastedBytes: 46200,
+          wastedPercent: 36,
+          type: "script",
+        },
+        {
+          url: "https://www.googletagmanager.com/gtm.js?id=GTM-DEMO",
+          label: "gtm.js",
+          totalBytes: 38900,
+          wastedBytes: 14200,
+          wastedPercent: 36,
+          type: "script",
+        },
+        {
+          url: "https://example.com/_next/static/css/app.css",
+          label: "app.css",
+          totalBytes: 42100,
+          wastedBytes: 18500,
+          wastedPercent: 44,
+          type: "stylesheet",
+        },
+      ],
+      totalWastedBytes: 78900,
+      potentialTimeSavingsMs: 160,
+    },
+    thirdParty: {
+      entities: [
+        {
+          entity: "Google Tag Manager",
+          category: "Tag Manager",
+          transferSize: 38900,
+          blockingTimeMs: 45,
+          mainThreadTimeMs: 120,
+          urlCount: 1,
+        },
+        {
+          entity: "Google Fonts",
+          category: "Typography",
+          transferSize: 68400,
+          blockingTimeMs: 0,
+          mainThreadTimeMs: 15,
+          urlCount: 2,
+        },
+      ],
+      firstPartyBytes: 1032700,
+      thirdPartyBytes: 107300,
+      thirdPartyPercent: 9,
+      firstPartyMainThreadMs: 200,
+      thirdPartyMainThreadMs: 135,
+    },
+    domHealth: {
+      totalElements: 540,
+      maxDepth: 14,
+      maxChildren: 28,
+      status: "good",
+      warnings: [
+        "Struktura DOM jest optymalna i zwięzła (540 elementów, głębokość 14). Brak ryzyka layout thrashing.",
+      ],
+    },
+    consoleIssues: [
+      {
+        type: "warning",
+        message: "Third-party cookie will be blocked in future Chrome versions as part of Privacy Sandbox.",
+        source: "gtm.js:14",
+        url: "https://www.googletagmanager.com/gtm.js?id=GTM-DEMO",
+      },
+    ],
   };
 }
 

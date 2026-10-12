@@ -149,6 +149,15 @@ async function main() {
       console.log(`  • ${padCat} ${cCol}\x1b[1m${cScore}/100\x1b[0m`);
     }
 
+    if (report.budget) {
+      console.log(`\n\x1b[1mPerformance Budget:\x1b[0m`);
+      for (const b of report.budget.budgets || []) {
+        const bCol = b.status === "good" ? "\x1b[32m" : b.status === "warn" ? "\x1b[33m" : "\x1b[31m";
+        const padName = (b.name + "                ").slice(0, 16);
+        console.log(`  • ${padName} ${(b.actualBytes / 1024).toFixed(1)} KB / ${(b.budgetBytes / 1024).toFixed(1)} KB (${bCol}${b.percentUsed}%\x1b[0m)`);
+      }
+    }
+
     if (report.recommendations && report.recommendations.length > 0) {
       console.log(`\n\x1b[1mTop Opportunities (${report.recommendations.length}):\x1b[0m`);
       for (const rec of report.recommendations.slice(0, 6)) {

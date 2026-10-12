@@ -216,6 +216,70 @@ export const CrawlerReadinessSchema = z.object({
 });
 export type CrawlerReadiness = z.infer<typeof CrawlerReadinessSchema>;
 
+export const BudgetCategorySchema = z.object({
+  name: z.string(),
+  budgetBytes: z.number(),
+  actualBytes: z.number(),
+  status: z.enum(["good", "warn", "bad"]),
+  percentUsed: z.number(),
+});
+export type BudgetCategory = z.infer<typeof BudgetCategorySchema>;
+
+export const CodeBloatItemSchema = z.object({
+  url: z.string(),
+  label: z.string(),
+  totalBytes: z.number(),
+  wastedBytes: z.number(),
+  wastedPercent: z.number(),
+  type: z.enum(["script", "stylesheet"]),
+});
+export type CodeBloatItem = z.infer<typeof CodeBloatItemSchema>;
+
+export const PerformanceBudgetSchema = z.object({
+  budgets: z.array(BudgetCategorySchema),
+  bloatItems: z.array(CodeBloatItemSchema),
+  totalWastedBytes: z.number(),
+  potentialTimeSavingsMs: z.number(),
+});
+export type PerformanceBudget = z.infer<typeof PerformanceBudgetSchema>;
+
+export const ThirdPartyEntitySchema = z.object({
+  entity: z.string(),
+  category: z.string(),
+  transferSize: z.number(),
+  blockingTimeMs: z.number(),
+  mainThreadTimeMs: z.number(),
+  urlCount: z.number(),
+});
+export type ThirdPartyEntity = z.infer<typeof ThirdPartyEntitySchema>;
+
+export const ThirdPartySummarySchema = z.object({
+  entities: z.array(ThirdPartyEntitySchema),
+  firstPartyBytes: z.number(),
+  thirdPartyBytes: z.number(),
+  thirdPartyPercent: z.number(),
+  firstPartyMainThreadMs: z.number(),
+  thirdPartyMainThreadMs: z.number(),
+});
+export type ThirdPartySummary = z.infer<typeof ThirdPartySummarySchema>;
+
+export const DomHealthSchema = z.object({
+  totalElements: z.number(),
+  maxDepth: z.number(),
+  maxChildren: z.number(),
+  status: z.enum(["good", "warn", "bad"]),
+  warnings: z.array(z.string()),
+});
+export type DomHealth = z.infer<typeof DomHealthSchema>;
+
+export const ConsoleIssueSchema = z.object({
+  type: z.enum(["error", "warning", "violation", "network"]),
+  message: z.string(),
+  source: z.string().optional(),
+  url: z.string().optional(),
+});
+export type ConsoleIssue = z.infer<typeof ConsoleIssueSchema>;
+
 export const CrawlSchema = z.object({
   sitemapFound: z.boolean().optional(),
   pages: z
@@ -262,6 +326,10 @@ export const AnalysisReportSchema = z.object({
   social: SocialMetadataSchema.optional(),
   structuredData: z.array(SchemaEntitySchema).optional(),
   crawlerReadiness: CrawlerReadinessSchema.optional(),
+  budget: PerformanceBudgetSchema.optional(),
+  thirdParty: ThirdPartySummarySchema.optional(),
+  domHealth: DomHealthSchema.optional(),
+  consoleIssues: z.array(ConsoleIssueSchema).optional(),
 });
 export type AnalysisReport = z.infer<typeof AnalysisReportSchema>;
 

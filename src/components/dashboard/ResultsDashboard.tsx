@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useI18n } from "@/i18n/provider";
 import { useAnalysisStore } from "@/lib/store";
 import type {
@@ -19,6 +19,13 @@ import {
   CrawlerReadinessPanel,
 } from "./SeoSocialPanels";
 import { NetworkWaterfall } from "./NetworkWaterfall";
+import {
+  BudgetPanel,
+  ThirdPartyPanel,
+  DomHealthPanel,
+  ConsoleIssuesPanel,
+} from "./DeepDiagnosticsPanels";
+import { AuditNavTabs } from "./AuditNavTabs";
 
 /* ============================================================
    Dashboard wyników — 1:1 z dashboard.html (light-monochrome),
@@ -611,7 +618,7 @@ export function ResultsDashboard({
   const headers = report.securityHeaders ?? [];
   const tech = report.techStack ?? [];
 
-  const sections: { id: string; label: string }[] = [
+  const sections: { id: string; label: string }[] = useMemo(() => [
     { id: "overview", label: "Overview" },
     ...(showVitals ? [{ id: "vitals", label: "Web Vitals" }] : []),
     ...(report.network && report.network.length > 0 ? [{ id: "network", label: "Waterfall" }] : []),
@@ -631,31 +638,95 @@ export function ResultsDashboard({
       ? [{ id: "schema", label: "Structured Data" }]
       : []),
     ...(report.crawlerReadiness ? [{ id: "crawler", label: "Robots & Sitemap" }] : []),
-  ];
+    ...(report.budget ? [{ id: "budget", label: "Budget & Bloat" }] : []),
+    ...(report.thirdParty ? [{ id: "thirdparty", label: "Third-Party" }] : []),
+    ...(report.domHealth ? [{ id: "dom", label: "DOM Health" }] : []),
+    ...(report.consoleIssues && report.consoleIssues.length > 0 ? [{ id: "console", label: "Console Log" }] : []),
+  ], [showVitals, report, perfAudits.length, recs.length, headers.length, tech.length]);
 
   const [activeSec, setActiveSec] = useState(sections[0]?.id ?? "overview");
 
+  const sectionsRef = useRef(sections);
+  sectionsRef.current = sections;
+
+  const embeddedRef = useRef(embedded);
+  embeddedRef.current = embedded;
+
   useEffect(() => {
-    const ids = sections.map((s) => s.id);
-    const els = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (els.length === 0) return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) setActiveSec(visible[0].target.id);
-      },
-      { root: null, rootMargin: "-20% 0px -70% 0px", threshold: [0, 0.25, 0.5, 1] },
-    );
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sections.map((s) => s.id).join("|")]);
+    const handleScroll = () => {
+      const currentSections = sectionsRef.current;
+      const sectionElements = currentSections
+        .map((s) => ({ id: s.id, el: document.getElementById(s.id) }))
+        .filter((item): item is { id: string; el: HTMLElement } => item.el !== null);
+
+      if (sectionElements.length === 0) return;
+
+      const windowHeight = window.innerHeight;
+      const lastItem = sectionElements[sectionElements.length - 1];
+      const lastRect = lastItem.el.getBoundingClientRect();
+
+      // 1. Sprawdź czy jesteśmy na samym dole strony (okno przeglądarki)
+      const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight
+      );
+      const isWindowAtBottom =
+        window.innerHeight + window.scrollY >= docHeight - 80;
+
+      // Sprawdź czy jesteśmy na dole modalu (np. AnalysisOutlet)
+      const scrollParent = lastItem.el.closest(".overflow-y-auto");
+      const isParentAtBottom = scrollParent
+        ? scrollParent.scrollTop + scrollParent.clientHeight >= scrollParent.scrollHeight - 60
+        : false;
+
+      // Sprawdź czy ostatnia sekcja jest już w widoku
+      const isLastFullyVisible =
+        lastRect.bottom <= windowHeight + 100 && lastRect.top < windowHeight * 0.85;
+
+      if (isWindowAtBottom || isParentAtBottom || isLastFullyVisible) {
+        setActiveSec(lastItem.id);
+        return;
+      }
+
+      // 2. Normalne wykrywanie sekcji najbliżej nagłówka
+      const headerThreshold = embeddedRef.current ? 220 : 160;
+      let activeId = sectionElements[0].id;
+
+      for (const item of sectionElements) {
+        const rect = item.el.getBoundingClientRect();
+        if (rect.top <= headerThreshold) {
+          activeId = item.id;
+        } else {
+          break;
+        }
+      }
+
+      setActiveSec(activeId);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+    window.addEventListener("resize", onScroll);
+    handleScroll();
+
+    return () => {
+      document.removeEventListener("scroll", onScroll, { capture: true });
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   const goTo = (id: string) => {
+    setActiveSec(id);
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -683,7 +754,7 @@ export function ResultsDashboard({
         className="sticky z-40 border-b border-line bg-white/[0.82] backdrop-blur-[14px] backdrop-saturate-[1.4]"
         style={{ top: embedded ? "var(--app-header-h, 64px)" : 0 }}
       >
-      <div className={WRAP}>
+      <div className="mx-auto max-w-[1360px] px-3 sm:px-6">
         <div className="flex flex-wrap items-start justify-between gap-6 pt-3 pb-4">
           <div className="min-w-0">
             <div className="flex items-center gap-[10px] font-mono tabular-nums text-[15px] text-ink">
@@ -734,21 +805,11 @@ export function ResultsDashboard({
         </div>
       </div>
 
-      <div className="border-t border-line">
-        <div className={`${WRAP} flex gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}>
-          {sections.map((s) => (
-            <button
-              key={s.id}
-              className={`whitespace-nowrap border-b-2 px-[14px] py-[15px] text-[13.5px] transition-[color,border-color] duration-[180ms] hover:text-ink ${
-                activeSec === s.id ? "border-ink text-ink" : "border-transparent text-gray-1"
-              }`}
-              onClick={() => goTo(s.id)}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-      </div>
+        <AuditNavTabs
+          sections={sections}
+          activeSec={activeSec}
+          onSelect={goTo}
+        />
       </div>
 
       <section id="overview" className={rsecCls}>
@@ -956,6 +1017,54 @@ export function ResultsDashboard({
               <span className={RSEC_NOTE}>Search engine crawler readiness &amp; discovery.</span>
             </div>
             <CrawlerReadinessPanel crawler={report.crawlerReadiness} />
+          </div>
+        </section>
+      )}
+
+      {report.budget && (
+        <section id="budget" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Budget &amp; Bloat</h2>
+              <span className={RSEC_NOTE}>Performance budgets &amp; code elimination.</span>
+            </div>
+            <BudgetPanel budget={report.budget} />
+          </div>
+        </section>
+      )}
+
+      {report.thirdParty && (
+        <section id="thirdparty" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Third-Party Impact</h2>
+              <span className={RSEC_NOTE}>External tags, scripts and CPU load breakdown.</span>
+            </div>
+            <ThirdPartyPanel summary={report.thirdParty} />
+          </div>
+        </section>
+      )}
+
+      {report.domHealth && (
+        <section id="dom" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>DOM Health</h2>
+              <span className={RSEC_NOTE}>Tree depth, node count &amp; layout thrashing risks.</span>
+            </div>
+            <DomHealthPanel domHealth={report.domHealth} />
+          </div>
+        </section>
+      )}
+
+      {report.consoleIssues && report.consoleIssues.length > 0 && (
+        <section id="console" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Console &amp; Runtime Log</h2>
+              <span className={RSEC_NOTE}>JavaScript errors, warnings &amp; failed HTTP requests.</span>
+            </div>
+            <ConsoleIssuesPanel issues={report.consoleIssues} />
           </div>
         </section>
       )}

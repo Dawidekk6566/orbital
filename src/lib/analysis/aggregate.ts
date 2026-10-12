@@ -23,6 +23,10 @@ import { evaluateCspAndSri } from "./cspSri";
 import { extractSocialMetadata } from "./socialSeo";
 import { validateStructuredData } from "./schemaValidator";
 import { checkCrawlerReadiness } from "./crawlerReadiness";
+import { extractPerformanceBudget } from "./codeBloat";
+import { extractThirdPartySummary } from "./thirdParty";
+import { extractDomHealth } from "./domHealth";
+import { extractConsoleIssues } from "./consoleLog";
 import type { Locale } from "@/i18n/messages";
 
 /* ============================================================
@@ -144,6 +148,12 @@ export async function analyze(
       ? validateStructuredData(inspection.html)
       : null;
 
+    const rawAudits = (psi?.raw as Record<string, unknown>) || {};
+    const budgetResult = extractPerformanceBudget(rawAudits, psi?.network || []);
+    const thirdPartyResult = extractThirdPartySummary(rawAudits, psi?.network || [], targetHost);
+    const domResult = extractDomHealth(rawAudits, inspection?.html);
+    const consoleResult = extractConsoleIssues(rawAudits, psi?.network || []);
+
     const enrichment = {
       ...(cruxField ? { vitals: { field: cruxField } } : {}),
       ...(sec ? { securityHeaders: sec.securityHeaders } : {}),
@@ -157,6 +167,10 @@ export async function analyze(
       ...(socialResult?.metadata ? { social: socialResult.metadata } : {}),
       ...(schemaResult?.entities.length ? { structuredData: schemaResult.entities } : {}),
       ...(crawlerRes?.crawler ? { crawlerReadiness: crawlerRes.crawler } : {}),
+      ...(budgetResult ? { budget: budgetResult } : {}),
+      ...(thirdPartyResult ? { thirdParty: thirdPartyResult } : {}),
+      ...(domResult ? { domHealth: domResult } : {}),
+      ...(consoleResult.length ? { consoleIssues: consoleResult } : {}),
     };
     const enrichRecs = [
       ...(sec?.recommendations ?? []),
