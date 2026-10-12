@@ -35,9 +35,9 @@ export function DashboardShell({
           <div className="flex h-14 items-center justify-between gap-6">
             <div className="flex items-center gap-3">
               <Link
-                href="/dashboard"
+                href="/"
                 className="flex items-center gap-2.5 text-[17px] font-semibold tracking-[-0.02em]"
-                aria-label="Orbital dashboard"
+                aria-label="Orbital home"
               >
                 <span
                   className="relative block h-4 w-4 flex-none rounded-full border-[1.6px] border-ink after:absolute after:left-1/2 after:top-[1.5px] after:-ml-[1.7px] after:h-[3.4px] after:w-[3.4px] after:rounded-full after:bg-ink after:content-['']"
