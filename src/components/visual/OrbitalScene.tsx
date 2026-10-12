@@ -1,10 +1,26 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useThemeColors } from "./useThemeColors";
+
+// Three.js r183+ oznaczyło THREE.Clock jako deprecated na rzecz THREE.Timer.
+// Ponieważ @react-three/fiber nadal wewnętrznie instancjonuje new THREE.Clock() w magazynie stanu,
+// przechwytujemy to ostrzeżenie za pomocą oficjalnego mechanizmu setConsoleFunction z Three.js.
+if (typeof window !== "undefined" && typeof THREE.setConsoleFunction === "function") {
+  THREE.setConsoleFunction((type, message, ...params) => {
+    if (
+      type === "warn" &&
+      typeof message === "string" &&
+      message.includes("Clock: This module has been deprecated")
+    ) {
+      return;
+    }
+    console[type](message, ...params);
+  });
+}
 
 /* ============================================================
    OrbitalScene — sygnaturowa, monochromatyczna scena 3D marki.
@@ -108,6 +124,34 @@ function System() {
   );
 }
 
+/**
+ * Integracja z nowoczesnym THREE.Timer zastępującym zdeprecjonowany THREE.Clock.
+ * Łączy timer z document (Page Visibility API, chroniąc przed skokami delta po uśpieniu karty)
+ * i synchronizuje precyzyjny upływ czasu do stanu sceny.
+ */
+function TimerBridge() {
+  const timer = useMemo(() => {
+    const t = new THREE.Timer();
+    if (typeof document !== "undefined") {
+      t.connect(document);
+    }
+    return t;
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      timer.disconnect();
+    };
+  }, [timer]);
+
+  useFrame((state) => {
+    timer.update();
+    state.clock.elapsedTime = timer.getElapsed();
+  });
+
+  return null;
+}
+
 export default function OrbitalScene({ active }: { active: boolean }) {
   return (
     <Canvas
@@ -117,6 +161,7 @@ export default function OrbitalScene({ active }: { active: boolean }) {
       frameloop={active ? "always" : "never"}
       style={{ background: "transparent" }}
     >
+      <TimerBridge />
       <ambientLight intensity={0.7} />
       <directionalLight position={[3, 4, 5]} intensity={1.1} />
       <directionalLight position={[-4, -2, -3]} intensity={0.4} />
