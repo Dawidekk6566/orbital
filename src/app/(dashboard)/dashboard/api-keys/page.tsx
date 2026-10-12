@@ -70,10 +70,26 @@ export default async function ApiKeysPage() {
 
           <section className="mt-12">
             <h2 className="text-[12px] uppercase tracking-[0.06em] text-muted">
-              Quick start
+              Terminal CLI (npx)
             </h2>
             <p className="mt-2 text-[13px] text-gray-1">
-              Authenticate with a bearer token. Run an audit for a URL:
+              Audit any site instantly from your terminal, npm scripts, or pre-commit hooks:
+            </p>
+            <pre className="mt-3 overflow-x-auto rounded-[10px] border border-line bg-white p-4 font-mono text-[12.5px] leading-[1.6] text-ink-2">
+              {`# Audit and fail build if score < 85
+npx orbital-audit https://your-site.com --fail-under 85
+
+# Export markdown report
+npx orbital-audit https://your-site.com --format markdown --output audit-report.md`}
+            </pre>
+          </section>
+
+          <section className="mt-10">
+            <h2 className="text-[12px] uppercase tracking-[0.06em] text-muted">
+              REST API Quick start
+            </h2>
+            <p className="mt-2 text-[13px] text-gray-1">
+              Authenticate with your API key to run and persist audits:
             </p>
             <pre className="mt-3 overflow-x-auto rounded-[10px] border border-line bg-white p-4 font-mono text-[12.5px] leading-[1.6] text-ink-2">
               {`curl -X POST ${appUrl}/api/v1/audits \\
@@ -88,38 +104,27 @@ export default async function ApiKeysPage() {
             </pre>
           </section>
 
-          <section className="mt-12">
+          <section className="mt-10">
             <h2 className="text-[12px] uppercase tracking-[0.06em] text-muted">
-              Continuous integration
+              GitHub Actions &amp; Quality Gate
             </h2>
             <p className="mt-2 text-[13px] text-gray-1">
-              Add your key as a repository secret named{" "}
-              <code className="font-mono text-[12.5px] text-ink">
-                ORBITAL_API_KEY
-              </code>
-              , then drop this workflow in{" "}
+              Drop this in{" "}
               <code className="font-mono text-[12.5px] text-ink">
                 .github/workflows/orbital-audit.yml
               </code>{" "}
-              to audit on every push:
+              to enforce quality on every Pull Request:
             </p>
             <pre className="mt-3 overflow-x-auto rounded-[10px] border border-line bg-white p-4 font-mono text-[12.5px] leading-[1.6] text-ink-2">
-              {`name: Orbital audit
-on:
-  push:
-    branches: [main]
+              {`name: Orbital Audit
+on: [pull_request, push]
 jobs:
   audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Orbital audit
-        env:
-          ORBITAL_API_KEY: \${{ secrets.ORBITAL_API_KEY }}
-        run: |
-          curl -sS --fail-with-body -X POST ${appUrl}/api/v1/audits \\
-            -H "Authorization: Bearer $ORBITAL_API_KEY" \\
-            -H "Content-Type: application/json" \\
-            -d '{"url": "https://example.com"}'`}
+      - uses: actions/checkout@v4
+      - name: Run Orbital Site Audit
+        run: npx orbital-audit "https://example.com" --fail-under 80`}
             </pre>
           </section>
         </>

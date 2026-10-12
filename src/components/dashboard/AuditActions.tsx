@@ -78,6 +78,21 @@ export function AuditActions({
     });
   }
 
+  const [copiedMd, setCopiedMd] = useState(false);
+
+  async function copyMarkdown() {
+    try {
+      const res = await fetch(`/api/export/audit/${auditId}?format=markdown`);
+      if (!res.ok) throw new Error();
+      const md = await res.text();
+      await navigator.clipboard.writeText(md);
+      setCopiedMd(true);
+      setTimeout(() => setCopiedMd(false), 2000);
+    } catch {
+      setError("Failed to copy markdown report to clipboard.");
+    }
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-2.5">
       {projectId ? (
@@ -101,6 +116,16 @@ export function AuditActions({
       <button type="button" onClick={() => window.print()} className={BTN_OUTLINE}>
         Print / PDF
       </button>
+      <button type="button" onClick={copyMarkdown} className={BTN_OUTLINE}>
+        {copiedMd ? "MD copied!" : "Copy MD"}
+      </button>
+      <a
+        href={`/api/export/audit/${auditId}?format=markdown`}
+        download={`orbital-audit-${auditId}.md`}
+        className={BTN_OUTLINE}
+      >
+        Export MD
+      </a>
       <a
         href={`/api/export/audit/${auditId}`}
         download={`orbital-audit-${auditId}.json`}

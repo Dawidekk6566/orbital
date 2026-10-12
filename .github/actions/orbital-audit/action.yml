@@ -1,0 +1,40 @@
+name: "Orbital Site Audit"
+description: "Run automated performance, SEO, accessibility and security audits with Quality Gate threshold in CI/CD"
+author: "Orbital"
+branding:
+  icon: "activity"
+  color: "black"
+
+inputs:
+  url:
+    description: "Target URL to analyze (e.g. preview deployment URL or production)"
+    required: true
+  fail-under:
+    description: "Minimum overall score (0-100) required to pass. Fails the step if score is lower."
+    required: false
+    default: "80"
+  api-key:
+    description: "Orbital API key (orb_...) for project tracking"
+    required: false
+  api-url:
+    description: "Orbital API server endpoint"
+    required: false
+    default: "https://orbital.dev"
+
+outputs:
+  score:
+    description: "Overall technical score (0-100)"
+  report:
+    description: "JSON report string"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Orbital Audit
+      shell: bash
+      run: |
+        npx orbital-audit "${{ inputs.url }}" \
+          --fail-under "${{ inputs.fail-under }}" \
+          --api-key "${{ inputs.api-key }}" \
+          --api-url "${{ inputs.api-url }}" \
+          --format table

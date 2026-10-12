@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit": "node ./bin/orbital.mjs"
+  },
+  "bin": {
+    "orbital-audit": "./bin/orbital.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

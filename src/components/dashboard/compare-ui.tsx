@@ -2,6 +2,7 @@ import type { AnalysisReport, Recommendation, Severity } from "@/lib/analysis/ty
 import type { ScoreDelta } from "@/lib/dashboard/diff";
 import { diffSecurityHeaders, diffTechStack, diffFieldVitals } from "@/lib/dashboard/diff";
 import { scoreTone, TONE_TEXT } from "@/lib/dashboard/score";
+import { VisualDiffSlider } from "./VisualDiffSlider";
 
 /* ============================================================
    Shared presentational pieces for the two comparison views
@@ -257,5 +258,42 @@ export function RichDiffCards({
         </section>
       )}
     </div>
+  );
+}
+
+export function VisualComparisonCard({
+  base,
+  target,
+  baseLabel = "Before",
+  targetLabel = "After",
+}: {
+  base: AnalysisReport;
+  target: AnalysisReport;
+  baseLabel?: string;
+  targetLabel?: string;
+}) {
+  const baseImg = base.screenshots?.aboveFold || base.screenshots?.full;
+  const targetImg = target.screenshots?.aboveFold || target.screenshots?.full;
+
+  if (!baseImg || !targetImg) return null;
+
+  return (
+    <section className="mt-8 rounded-[10px] border border-line bg-white p-5">
+      <div className="mb-3 flex items-baseline justify-between gap-3">
+        <div>
+          <h2 className="text-[15px] font-semibold tracking-[-0.01em]">Visual regression diff</h2>
+          <p className="font-mono text-[11px] text-faint">
+            Drag the split line to inspect visual differences between {baseLabel} and {targetLabel}.
+          </p>
+        </div>
+      </div>
+      <VisualDiffSlider
+        beforeImage={baseImg}
+        afterImage={targetImg}
+        beforeLabel={baseLabel}
+        afterLabel={targetLabel}
+        className="max-h-[500px]"
+      />
+    </section>
   );
 }

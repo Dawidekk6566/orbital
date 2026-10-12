@@ -60,7 +60,7 @@
 html.dark {
   color-scheme: dark;
 
-  --color-void: #0b0b0e;
+  --color-void: #07070a;
   --color-ink: #f3f3f4;
   --color-ink-2: #e4e4e6;
   --color-star: #ececed;
@@ -113,10 +113,9 @@ html.dark {
 
 html {
   scroll-behavior: smooth;
-  /* Kosmiczna baza — głęboka czerń pod globalnym tłem z gwiazdami
-     (SpaceBackground). Ustawiona na <html>, więc nie ma białego
-     błysku zanim zamontuje się warstwa cząsteczek. */
-  background-color: #07070a;
+  /* Kosmiczna baza — automatycznie dopasowana do motywu (biel na light mode, głęboka czerń na dark mode) */
+  background-color: var(--color-void);
+  transition: background-color 0.3s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -321,16 +320,33 @@ select:focus {
   html { scroll-behavior: auto; }
   body {
     overflow: visible;
-    font-size: 12pt;
-    background: #fff;
+    font-size: 11pt;
+    background: #fff !important;
+    color: #0a0a0a !important;
   }
-  /* Print the semantic band/gauge colours, don't let the browser
-     strip them for ink saving. */
   * {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  .gauge .arc { transition: none; }
+  .gauge .arc { transition: none !important; }
   a[href]::after { content: ""; } /* no ugly URL expansion */
+  
+  /* Avoid breaking audit cards and sections midway across printed pages */
+  section,
+  article,
+  .rounded-\[8px\],
+  .rounded-\[10px\],
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Hide non-printable widgets and background decorations */
+  nav,
+  header.sticky,
+  button,
+  .print\:hidden {
+    display: none !important;
+  }
 }
 

@@ -1,0 +1,31 @@
+name: Orbital Audit CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Audit Website Performance & Security
+        run: |
+          npx orbital-audit "${{ secrets.DEPLOY_URL || 'https://example.com' }}" \
+            --fail-under 80 \
+            --format markdown \
+            --output ./audit-report.md
+
+      - name: Upload Audit Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: orbital-audit-report
+          path: ./audit-report.md

@@ -1,4 +1,5 @@
 import type { CategoryKey, CategoryResult, Metric, MetricStatus } from "./types";
+import type { NetworkEntry } from "./renderArtifact";
 
 /* ============================================================
    Integracja z Google PageSpeed Insights (Lighthouse) — po stronie serwera.
@@ -147,7 +148,7 @@ function categoryFrom(
  */
 export async function runPageSpeed(
   rawUrl: string,
-): Promise<{ categories: CategoryResult[]; raw: unknown } | null> {
+): Promise<{ categories: CategoryResult[]; raw: unknown; network?: NetworkEntry[] } | null> {
   const params = new URLSearchParams();
   params.set("url", rawUrl);
   params.set("strategy", "mobile");
@@ -182,7 +183,41 @@ export async function runPageSpeed(
       categoryFrom("security", audits, cats["best-practices"]?.score ?? null),
     ];
 
-    return { categories, raw: audits };
+    // Ekstrakcja zapytań sieciowych (network waterfall)
+    const networkRaw = audits["network-requests"] as
+      | { details?: { items?: Array<Record<string, unknown>> } }
+      | undefined;
+    const networkItems = networkRaw?.details?.items ?? [];
+    const network: NetworkEntry[] = networkItems.map((item) => {
+      const url = String(item.url || "");
+      let domain: string | undefined;
+      let thirdParty = false;
+      try {
+        domain = new URL(url).hostname;
+        const pageHost = new URL(rawUrl).hostname;
+        thirdParty = domain !== pageHost;
+      } catch {
+        // fallback
+      }
+
+      const startTime = typeof item.startTime === "number" ? Math.round(item.startTime * 1000) : undefined;
+      const endTime = typeof item.endTime === "number" ? Math.round(item.endTime * 1000) : undefined;
+      const duration = endTime != null && startTime != null ? Math.max(0, endTime - startTime) : undefined;
+
+      return {
+        url,
+        resourceType: typeof item.resourceType === "string" ? item.resourceType.toLowerCase() : undefined,
+        status: typeof item.statusCode === "number" ? item.statusCode : undefined,
+        mimeType: typeof item.mimeType === "string" ? item.mimeType : undefined,
+        transferSize: typeof item.transferSize === "number" ? item.transferSize : undefined,
+        startTime,
+        duration,
+        domain,
+        thirdParty,
+      };
+    });
+
+    return { categories, raw: audits, network: network.length > 0 ? network : undefined };
   } catch {
     return null;
   }

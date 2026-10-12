@@ -8,6 +8,7 @@ import {
   ScoreCard,
   FindingSection,
   RichDiffCards,
+  VisualComparisonCard,
   hostOf,
   auditDateFmt as fmt,
 } from "@/components/dashboard/compare-ui";
@@ -155,6 +156,13 @@ export default async function ComparePage({
           </p>
         </section>
       </div>
+
+      <VisualComparisonCard
+        base={older.report}
+        target={newer.report}
+        baseLabel="Older audit"
+        targetLabel="Newer audit"
+      />
 
       <RichDiffCards
         base={older.report}

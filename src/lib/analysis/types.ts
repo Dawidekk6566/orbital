@@ -6,6 +6,7 @@ import {
   TlsInfoSchema,
   LabVitalsSchema,
 } from "./renderArtifact";
+export type { NetworkEntry } from "./renderArtifact";
 
 /* ============================================================
    Wspólne typy i schematy walidacji (klient + serwer).
@@ -114,6 +115,107 @@ export const SecurityHeaderSchema = z.object({
 });
 export type SecurityHeader = z.infer<typeof SecurityHeaderSchema>;
 
+export const DnsRecordStatusSchema = z.object({
+  present: z.boolean(),
+  value: z.string().optional(),
+  details: z.string().optional(),
+  status: z.enum(["good", "warn", "bad"]),
+});
+
+export const DnsSecSchema = z.object({
+  spf: DnsRecordStatusSchema.optional(),
+  dmarc: DnsRecordStatusSchema.optional(),
+  caa: DnsRecordStatusSchema.optional(),
+  mx: z.array(z.string()).optional(),
+});
+export type DnsSecInfo = z.infer<typeof DnsSecSchema>;
+
+export const CveEntrySchema = z.object({
+  id: z.string(),
+  library: z.string(),
+  version: z.string(),
+  severity: z.enum(SEVERITIES),
+  title: z.string(),
+  summary: z.string(),
+  cve: z.string().optional(),
+  fixVersion: z.string().optional(),
+  link: z.string().optional(),
+});
+export type CveEntry = z.infer<typeof CveEntrySchema>;
+
+export const CspFindingSchema = z.object({
+  directive: z.string(),
+  severity: z.enum(SEVERITIES),
+  issue: z.string(),
+  recommendation: z.string(),
+});
+
+export const CspEvaluationSchema = z.object({
+  hasCsp: z.boolean(),
+  score: z.number().min(0).max(100).optional(),
+  findings: z.array(CspFindingSchema).optional(),
+  missingDirectives: z.array(z.string()).optional(),
+});
+export type CspEvaluation = z.infer<typeof CspEvaluationSchema>;
+
+export const SriCheckSchema = z.object({
+  url: z.string(),
+  hasIntegrity: z.boolean(),
+  isThirdParty: z.boolean(),
+  tag: z.enum(["script", "stylesheet"]),
+});
+export type SriCheck = z.infer<typeof SriCheckSchema>;
+
+export const SocialMetadataSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  canonicalUrl: z.string().optional(),
+  favicon: z.string().optional(),
+  og: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    url: z.string().optional(),
+    siteName: z.string().optional(),
+    type: z.string().optional(),
+  }),
+  twitter: z.object({
+    card: z.string().optional(),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    site: z.string().optional(),
+    creator: z.string().optional(),
+  }),
+});
+export type SocialMetadata = z.infer<typeof SocialMetadataSchema>;
+
+export const SchemaEntitySchema = z.object({
+  type: z.string(),
+  name: z.string().optional(),
+  raw: z.record(z.string(), z.unknown()),
+  valid: z.boolean(),
+  issues: z.array(z.string()),
+});
+export type SchemaEntity = z.infer<typeof SchemaEntitySchema>;
+
+export const CrawlerReadinessSchema = z.object({
+  robots: z.object({
+    found: z.boolean(),
+    disallowAll: z.boolean(),
+    rulesCount: z.number(),
+    sitemapsDeclared: z.array(z.string()),
+    contentSnippet: z.string().optional(),
+  }),
+  sitemap: z.object({
+    found: z.boolean(),
+    url: z.string().optional(),
+    statusCode: z.number().optional(),
+    isXml: z.boolean().optional(),
+  }),
+});
+export type CrawlerReadiness = z.infer<typeof CrawlerReadinessSchema>;
+
 export const CrawlSchema = z.object({
   sitemapFound: z.boolean().optional(),
   pages: z
@@ -153,6 +255,13 @@ export const AnalysisReportSchema = z.object({
   screenshots: z
     .object({ full: z.string().optional(), aboveFold: z.string().optional() })
     .optional(),
+  dns: DnsSecSchema.optional(),
+  cveList: z.array(CveEntrySchema).optional(),
+  csp: CspEvaluationSchema.optional(),
+  sri: z.array(SriCheckSchema).optional(),
+  social: SocialMetadataSchema.optional(),
+  structuredData: z.array(SchemaEntitySchema).optional(),
+  crawlerReadiness: CrawlerReadinessSchema.optional(),
 });
 export type AnalysisReport = z.infer<typeof AnalysisReportSchema>;
 

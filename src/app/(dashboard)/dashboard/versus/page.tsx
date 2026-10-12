@@ -8,6 +8,7 @@ import {
   ScoreCard,
   FindingSection,
   RichDiffCards,
+  VisualComparisonCard,
   hostOf,
 } from "@/components/dashboard/compare-ui";
 import { scoreTone, TONE_TEXT } from "@/lib/dashboard/score";
@@ -163,6 +164,13 @@ export default async function VersusPage({
           </p>
         </section>
       </div>
+
+      <VisualComparisonCard
+        base={them.report}
+        target={you.report}
+        baseLabel={theirHost}
+        targetLabel={yourHost}
+      />
 
       <RichDiffCards
         base={them.report}

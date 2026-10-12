@@ -12,6 +12,13 @@ import type {
 } from "@/lib/analysis/types";
 import { SEVERITY_ORDER } from "@/lib/analysis/types";
 import { getCheckDoc, type CheckDoc } from "@/lib/analysis/checkDocs";
+import { DnsPanel, CvePanel, CspSriPanel } from "./SecurityPanels";
+import {
+  SocialPreviewSimulator,
+  StructuredDataPanel,
+  CrawlerReadinessPanel,
+} from "./SeoSocialPanels";
+import { NetworkWaterfall } from "./NetworkWaterfall";
 
 /* ============================================================
    Dashboard wyników — 1:1 z dashboard.html (light-monochrome),
@@ -607,6 +614,7 @@ export function ResultsDashboard({
   const sections: { id: string; label: string }[] = [
     { id: "overview", label: "Overview" },
     ...(showVitals ? [{ id: "vitals", label: "Web Vitals" }] : []),
+    ...(report.network && report.network.length > 0 ? [{ id: "network", label: "Waterfall" }] : []),
     ...(perfAudits.length ? [{ id: "performance", label: "Performance" }] : []),
     ...(recs.length ? [{ id: "opportunities", label: "Opportunities" }] : []),
     ...AUDIT_CATS.filter((k) => (catOf(k)?.metrics.length ?? 0) > 0).map((k) => ({
@@ -614,7 +622,15 @@ export function ResultsDashboard({
       label: CATEGORY_LABEL[k],
     })),
     ...(headers.length ? [{ id: "headers", label: "Headers & TLS" }] : []),
+    ...(report.dns ? [{ id: "dns", label: "DNS & Domain" }] : []),
+    ...(report.cveList && report.cveList.length > 0 ? [{ id: "cve", label: "Vulnerabilities (CVE)" }] : []),
+    ...(report.csp || (report.sri && report.sri.length > 0) ? [{ id: "csp", label: "CSP & SRI" }] : []),
     ...(tech.length ? [{ id: "techstack", label: "Tech stack" }] : []),
+    ...(report.social ? [{ id: "social", label: "Social & SERP" }] : []),
+    ...(report.structuredData && report.structuredData.length > 0
+      ? [{ id: "schema", label: "Structured Data" }]
+      : []),
+    ...(report.crawlerReadiness ? [{ id: "crawler", label: "Robots & Sitemap" }] : []),
   ];
 
   const [activeSec, setActiveSec] = useState(sections[0]?.id ?? "overview");
@@ -776,6 +792,20 @@ export function ResultsDashboard({
         </section>
       )}
 
+      {report.network && report.network.length > 0 && (
+        <section id="network" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Network Waterfall</h2>
+              <span className={RSEC_NOTE}>
+                {report.network.length} requests captured · HAR resource waterfall.
+              </span>
+            </div>
+            <NetworkWaterfall entries={report.network} pageUrl={report.target.value} />
+          </div>
+        </section>
+      )}
+
       {perfAudits.length > 0 && (
         <section id="performance" className={rsecCls}>
           <div className={WRAP}>
@@ -844,6 +874,42 @@ export function ResultsDashboard({
         </section>
       )}
 
+      {report.dns && (
+        <section id="dns" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>DNS &amp; Domain</h2>
+              <span className={RSEC_NOTE}>SPF, DMARC, CAA and mail exchange records.</span>
+            </div>
+            <DnsPanel dns={report.dns} />
+          </div>
+        </section>
+      )}
+
+      {report.cveList && report.cveList.length > 0 && (
+        <section id="cve" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Vulnerabilities (CVE)</h2>
+              <span className={RSEC_NOTE}>{report.cveList.length} known library security advisory(s).</span>
+            </div>
+            <CvePanel cveList={report.cveList} />
+          </div>
+        </section>
+      )}
+
+      {(report.csp || (report.sri && report.sri.length > 0)) && (
+        <section id="csp" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>CSP &amp; SRI</h2>
+              <span className={RSEC_NOTE}>Content Security Policy &amp; supply-chain integrity.</span>
+            </div>
+            <CspSriPanel csp={report.csp} sri={report.sri} />
+          </div>
+        </section>
+      )}
+
       {tech.length > 0 && (
         <section id="techstack" className={rsecCls}>
           <div className={WRAP}>
@@ -852,6 +918,44 @@ export function ResultsDashboard({
               <span className={RSEC_NOTE}>Detected technologies ({tech.length}).</span>
             </div>
             <TechStack tech={tech} />
+          </div>
+        </section>
+      )}
+
+      {report.social && (
+        <section id="social" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Social &amp; SERP Preview</h2>
+              <span className={RSEC_NOTE}>OpenGraph, Twitter Cards and search snippets.</span>
+            </div>
+            <SocialPreviewSimulator social={report.social} url={report.target.value} />
+          </div>
+        </section>
+      )}
+
+      {report.structuredData && report.structuredData.length > 0 && (
+        <section id="schema" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Structured Data (Schema.org)</h2>
+              <span className={RSEC_NOTE}>
+                {report.structuredData.length} JSON-LD entities validated.
+              </span>
+            </div>
+            <StructuredDataPanel entities={report.structuredData} />
+          </div>
+        </section>
+      )}
+
+      {report.crawlerReadiness && (
+        <section id="crawler" className={rsecCls}>
+          <div className={WRAP}>
+            <div className={RSEC_HEAD}>
+              <h2 className={RSEC_H2}>Robots &amp; Sitemap</h2>
+              <span className={RSEC_NOTE}>Search engine crawler readiness &amp; discovery.</span>
+            </div>
+            <CrawlerReadinessPanel crawler={report.crawlerReadiness} />
           </div>
         </section>
       )}

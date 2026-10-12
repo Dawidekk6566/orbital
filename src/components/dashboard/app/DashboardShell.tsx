@@ -2,6 +2,7 @@ import Link from "next/link";
 import { TopNavTabs } from "./TopNavTabs";
 import { NotificationBell } from "./NotificationBell";
 import { AppHeaderMeasure } from "./AppHeaderMeasure";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { signOut } from "@/lib/auth/actions";
 import type { PlanId } from "@/lib/plans";
 import { PLAN_LABELS } from "@/lib/plans";
@@ -63,6 +64,7 @@ export function DashboardShell({
                   {userEmail}
                 </Link>
               ) : null}
+              <ThemeToggle size="sm" />
               <NotificationBell
                 initialItems={notifications}
                 initialUnread={unreadCount}

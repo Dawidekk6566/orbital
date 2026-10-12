@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAnalysisStore } from "@/lib/store";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 /* ============================================================
    Nawigacja landingu (.nav) — 1:1 z HTML. Klasa .scrolled po
@@ -67,7 +68,8 @@ export function Navbar({ isAuthed = false }: { isAuthed?: boolean }) {
             Dashboard
           </Link>
         </nav>
-        <div className="flex items-center gap-[18px]">
+        <div className="flex items-center gap-[14px]">
+          <ThemeToggle />
           {isAuthed ? (
             <Link
               className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-[11px] text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222]"

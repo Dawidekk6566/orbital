@@ -17,6 +17,12 @@ import { runCrux } from "./crux";
 import { inspectHttp } from "./httpInspect";
 import { analyzeSecurity } from "./security";
 import { detectTechStack } from "./techstack";
+import { analyzeDns } from "./dnsSec";
+import { scanTechStackCve } from "./cve";
+import { evaluateCspAndSri } from "./cspSri";
+import { extractSocialMetadata } from "./socialSeo";
+import { validateStructuredData } from "./schemaValidator";
+import { checkCrawlerReadiness } from "./crawlerReadiness";
 import type { Locale } from "@/i18n/messages";
 
 /* ============================================================
@@ -109,12 +115,16 @@ export async function analyze(
     // SSRF: waliduje adres zanim cokolwiek pobierzemy.
     await assertSafeUrl(request.url);
 
-    // Równolegle: Lighthouse (PSI), dane terenowe CrUX oraz bezprzeglądarkowa
-    // inspekcja HTTP/TLS (nagłówki + HTML + certyfikat). Wszystko opcjonalne.
-    const [psi, cruxField, inspection] = await Promise.all([
+    const targetHost = new URL(request.url).hostname;
+
+    // Równolegle: Lighthouse (PSI), dane terenowe CrUX, bezprzeglądarkowa
+    // inspekcja HTTP/TLS, audyt DNS oraz crawler readiness (robots.txt, sitemap).
+    const [psi, cruxField, inspection, dnsResult, crawlerRes] = await Promise.all([
       runPageSpeed(request.url),
       runCrux(request.url),
       inspectHttp(request.url).catch(() => null),
+      analyzeDns(targetHost).catch(() => null),
+      checkCrawlerReadiness(request.url).catch(() => null),
     ]);
 
     // Wspólne wzbogacenia (niezależne od ścieżki PSI/reguł).
@@ -122,13 +132,41 @@ export async function analyze(
       ? analyzeSecurity(inspection.headers, inspection.finalUrl, inspection.tls)
       : null;
     const tech = inspection ? detectTechStack(inspection.headers, inspection.html) : [];
+    const cveResult = tech.length ? scanTechStackCve(tech) : { cveList: [], recommendations: [] };
+    const cspSriResult = inspection
+      ? evaluateCspAndSri(inspection.headers, inspection.html, inspection.finalUrl)
+      : { csp: { hasCsp: false }, sri: [], recommendations: [] };
+
+    const socialResult = inspection?.html
+      ? extractSocialMetadata(inspection.html, inspection.finalUrl)
+      : null;
+    const schemaResult = inspection?.html
+      ? validateStructuredData(inspection.html)
+      : null;
+
     const enrichment = {
       ...(cruxField ? { vitals: { field: cruxField } } : {}),
       ...(sec ? { securityHeaders: sec.securityHeaders } : {}),
       ...(inspection?.tls ? { tls: inspection.tls } : {}),
       ...(tech.length ? { techStack: tech } : {}),
+      ...(psi?.network ? { network: psi.network } : {}),
+      ...(dnsResult?.dns ? { dns: dnsResult.dns } : {}),
+      ...(cveResult.cveList.length ? { cveList: cveResult.cveList } : {}),
+      ...(cspSriResult.csp ? { csp: cspSriResult.csp } : {}),
+      ...(cspSriResult.sri.length ? { sri: cspSriResult.sri } : {}),
+      ...(socialResult?.metadata ? { social: socialResult.metadata } : {}),
+      ...(schemaResult?.entities.length ? { structuredData: schemaResult.entities } : {}),
+      ...(crawlerRes?.crawler ? { crawlerReadiness: crawlerRes.crawler } : {}),
     };
-    const enrichRecs = sec?.recommendations ?? [];
+    const enrichRecs = [
+      ...(sec?.recommendations ?? []),
+      ...(dnsResult?.recommendations ?? []),
+      ...cveResult.recommendations,
+      ...cspSriResult.recommendations,
+      ...(socialResult?.recommendations ?? []),
+      ...(schemaResult?.recommendations ?? []),
+      ...(crawlerRes?.recommendations ?? []),
+    ];
 
     if (psi) {
       const ai = await aiRefineFromPageSpeed(request.url, psi.raw, locale);

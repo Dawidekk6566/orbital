@@ -1,20 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import Particles, { ParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import { useReducedMotion } from "framer-motion";
 import type { Engine, ISourceOptions } from "@tsparticles/engine";
+import { useTheme } from "@/components/theme/ThemeProvider";
 
 /* ============================================================
-   Starfield — subtelne „gwiazdy" tsparticles pod ciemnymi sekcjami
-   (CtaBand). Niska gęstość, powolny dryf, biała barwa na czerni —
-   spójne z motywem „Orbital". Dekoracyjne (aria-hidden, bez
-   interakcji). prefers-reduced-motion → statyczne punkty bez ruchu.
-
-   API @tsparticles/react v4: silnik inicjuje <ParticlesProvider init>
-   (callback MUSI być stabilny — stąd stała na poziomie modułu); dzieci
-   montują się dopiero po załadowaniu silnika (slim bundle).
+   Starfield — subtelne „gwiazdy" tsparticles pod całą aplikacją
+   i ciemnymi sekcjami. Niska gęstość, powolny dryf.
+   - Dark Mode: biała barwa na głębokiej czerni (#ffffff)
+   - Light Mode: delikatny kosmiczny pył (#0a0a0a) na białym tle
    ============================================================ */
 
 const initEngine = async (engine: Engine) => {
@@ -29,6 +26,14 @@ export function Starfield({
   count?: number;
 }) {
   const reduce = useReducedMotion();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme === "dark" : true;
 
   const options = useMemo<ISourceOptions>(
     () => ({
@@ -37,12 +42,12 @@ export function Starfield({
       detectRetina: true,
       particles: {
         number: { value: count ?? (reduce ? 36 : 68) },
-        color: { value: "#ffffff" },
+        color: { value: isDark ? "#ffffff" : "#0a0a0a" },
         opacity: {
-          value: { min: 0.06, max: 0.42 },
+          value: isDark ? { min: 0.08, max: 0.45 } : { min: 0.04, max: 0.22 },
           animation: { enable: !reduce, speed: 0.5, sync: false, startValue: "random" },
         },
-        size: { value: { min: 0.4, max: 1.6 } },
+        size: { value: isDark ? { min: 0.4, max: 1.6 } : { min: 0.5, max: 1.8 } },
         move: {
           enable: !reduce,
           speed: 0.25,
@@ -57,13 +62,18 @@ export function Starfield({
         events: { onHover: { enable: false }, onClick: { enable: false }, resize: { enable: true } },
       },
     }),
-    [reduce, count],
+    [reduce, count, isDark],
   );
 
   return (
     <div aria-hidden="true" className={`pointer-events-none ${className}`}>
       <ParticlesProvider init={initEngine}>
-        <Particles id="orbital-starfield" options={options} className="h-full w-full" />
+        <Particles
+          key={isDark ? "dark" : "light"}
+          id={`orbital-starfield-${isDark ? "dark" : "light"}`}
+          options={options}
+          className="h-full w-full"
+        />
       </ParticlesProvider>
     </div>
   );
