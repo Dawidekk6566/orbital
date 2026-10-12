@@ -38,12 +38,12 @@ export function AnalysisOutlet() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[60] overflow-y-auto bg-void/80 backdrop-blur-md"
+          className="fixed inset-0 z-[60] overflow-y-auto overflow-x-hidden bg-void/80 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-label={t.dashboard.recommendations}
         >
-          <div className="min-h-full px-4 py-10 sm:px-6 sm:py-16">
+          <div className="min-h-full w-full max-w-full px-2 xs:px-4 py-8 sm:px-6 sm:py-16">
             {status === "loading" && (
               <div className="flex min-h-[70vh] items-center justify-center">
                 <CosmicLoader />

@@ -78,8 +78,8 @@ const BTN_PRIMARY = `${BTN_BASE} bg-ink text-white hover:bg-[#222]`;
 
 export default function PricingPage() {
   return (
-    <section className="flex h-dvh flex-col overflow-hidden pt-16 max-[920px]:h-auto max-[920px]:min-h-dvh max-[920px]:overflow-visible">
-      <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-center px-[clamp(24px,5vw,40px)] py-[clamp(20px,3.5vh,44px)]">
+    <section className="flex h-dvh w-full max-w-full flex-col overflow-x-clip pt-16 max-[920px]:h-auto max-[920px]:min-h-dvh">
+      <div className="mx-auto flex w-full max-w-[1180px] flex-1 flex-col justify-center px-4 sm:px-[clamp(24px,5vw,40px)] py-[clamp(20px,3.5vh,44px)]">
         <header className="mx-auto max-w-[640px] text-center [animation:fade-up_.6s_cubic-bezier(.16,1,.3,1)_both] motion-reduce:animate-none">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">
             Pricing

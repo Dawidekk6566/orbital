@@ -50,7 +50,7 @@ export function Faq() {
 
   return (
     <section className="relative py-[clamp(60px,8vw,110px)]" id="faq">
-      <div className="mx-auto max-w-[820px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[820px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] text-center">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">
             Frequently asked
@@ -70,7 +70,7 @@ export function Faq() {
               return (
                 <div className="border-b border-line" key={item.q}>
                   <button
-                    className="grid w-full grid-cols-[auto_1fr] items-center gap-4 px-1 py-[21px] text-left transition-colors duration-150 hover:bg-bg-soft"
+                    className="grid w-full grid-cols-[16px_minmax(0,1fr)] items-center gap-3 sm:gap-4 px-1 py-4 sm:py-[21px] text-left transition-colors duration-150 hover:bg-bg-soft"
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => setOpen(isOpen ? null : i)}
@@ -81,7 +81,7 @@ export function Faq() {
                       }`}
                       aria-hidden="true"
                     />
-                    <span className="text-[clamp(16px,1.6vw,19px)] font-medium tracking-[-0.01em] text-ink">
+                    <span className="min-w-0 break-words text-[clamp(15px,1.6vw,19px)] font-medium tracking-[-0.01em] text-ink">
                       {item.q}
                     </span>
                   </button>
@@ -91,7 +91,7 @@ export function Faq() {
                     }`}
                   >
                     <div className="min-h-0 overflow-hidden">
-                      <p className="max-w-[64ch] pb-[26px] pl-8 pr-1 text-[15.5px] leading-[1.65] text-gray-1">
+                      <p className="max-w-[64ch] pb-[26px] pl-6 sm:pl-8 pr-1 text-[15px] sm:text-[15.5px] leading-[1.65] text-gray-1">
                         {item.a}
                       </p>
                     </div>

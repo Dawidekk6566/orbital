@@ -229,7 +229,7 @@ export function AuditNavTabs({
 
           {/* Okno rozwijane z pogrupowanymi sekcjami */}
           {dropdownOpen && (
-            <div className="absolute right-0 top-full z-50 mt-1.5 w-[calc(100vw-24px)] max-w-[320px] sm:max-w-[440px] rounded-[10px] border border-line bg-white p-3.5 sm:p-4 shadow-xl backdrop-blur-xl dark:bg-[#16171a]">
+            <div className="absolute right-0 top-full z-50 mt-1.5 w-[calc(100vw-32px)] max-w-[320px] sm:max-w-[440px] rounded-[10px] border border-line bg-white p-3.5 sm:p-4 shadow-xl backdrop-blur-xl dark:bg-[#16171a]">
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="font-mono text-[12px] font-semibold text-ink">
                   Jump to report section

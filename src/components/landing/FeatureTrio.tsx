@@ -3,7 +3,7 @@ import { Reveal } from "./Reveal";
 export function FeatureTrio() {
   return (
     <section className="scroll-mt-16 py-[clamp(52px,6.5vw,92px)]" id="features">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">What we measure</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Four categories. One honest number.</h2>

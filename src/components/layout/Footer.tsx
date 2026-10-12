@@ -1,9 +1,9 @@
 export function Footer() {
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)] py-[clamp(56px,7vw,80px)]">
-        <div className="grid grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-10 max-[920px]:grid-cols-2 max-[920px]:gap-x-6 max-[920px]:gap-y-8">
-          <div className="max-[920px]:col-span-2">
+    <footer className="w-full max-w-full overflow-hidden border-t border-line">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)] py-[clamp(56px,7vw,80px)]">
+        <div className="grid grid-cols-2 max-[500px]:grid-cols-1 md:grid-cols-[1.6fr_1fr_1fr_1fr_1fr] gap-8 md:gap-10">
+          <div className="col-span-2 max-[500px]:col-span-1 md:col-span-1">
             <a
               className="mb-4 flex items-center gap-2.5 text-[18px] font-semibold tracking-[-0.02em]"
               href="#top"

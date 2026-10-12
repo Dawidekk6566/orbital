@@ -1,9 +1,9 @@
 export function LogoCloud() {
   return (
     <section className="border-y border-line">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)] py-[clamp(40px,5vw,56px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)] py-[clamp(40px,5vw,56px)]">
         <p className="mb-[34px] text-center text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Trusted by engineering teams at</p>
-        <div className="flex flex-wrap items-center justify-center gap-[clamp(30px,5.5vw,68px)]">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-[clamp(30px,5.5vw,68px)]">
           <span className="flex items-center gap-2 text-[18px] font-semibold tracking-[-0.02em] text-faint transition-colors duration-200 hover:text-gray-1">
             <svg className="h-[18px] w-[18px] flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M4 20V4l16 16V4" />

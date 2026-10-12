@@ -764,7 +764,7 @@ export function ResultsDashboard({
       : "Desktop conditions — fast connection, no throttling.";
 
   return (
-    <div>
+    <div className="w-full max-w-full overflow-x-clip">
       <div
         className="sticky z-40 border-b border-line bg-white/[0.82] backdrop-blur-[14px] backdrop-saturate-[1.4]"
         style={{ top: embedded ? "var(--app-header-h, 64px)" : 0 }}

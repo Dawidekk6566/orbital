@@ -84,7 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="relative flex min-h-full flex-col bg-transparent text-star">
+      <body className="relative flex min-h-full w-full max-w-full flex-col overflow-x-clip bg-transparent text-star">
         <ThemeProvider>
           <I18nProvider>{children}</I18nProvider>
         </ThemeProvider>

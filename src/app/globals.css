@@ -116,7 +116,10 @@ html {
   /* Kosmiczna baza — automatycznie dopasowana do motywu (biel na light mode, głęboka czerń na dark mode) */
   background-color: var(--color-void);
   transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -135,7 +138,11 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  overflow-x: clip;
+  position: relative;
 }
 
 /* Nagłówki – krój display, ciasny tracking (Space Grotesk) */

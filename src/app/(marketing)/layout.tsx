@@ -24,7 +24,7 @@ export default async function MarketingLayout({
     <>
       <SpaceBackground />
       <Navbar isAuthed={Boolean(user)} />
-      <main className="flex-1" id="top">
+      <main className="flex-1 w-full max-w-full overflow-x-clip" id="top">
         {children}
       </main>
       <ConditionalFooter />

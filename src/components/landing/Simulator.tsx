@@ -58,7 +58,7 @@ export function Simulator() {
 
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="simulator">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">What-if simulator</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">See what a fix is worth.</h2>
@@ -68,7 +68,7 @@ export function Simulator() {
             doing before you touch a line of code.
           </p>
         </Reveal>
-        <Reveal className="grid grid-cols-[1fr_minmax(0,410px)] items-center gap-[clamp(40px,6vw,72px)] max-[920px]:grid-cols-1 max-[920px]:gap-[38px]">
+        <Reveal className="grid grid-cols-1 md:grid-cols-[1fr_minmax(0,410px)] items-center gap-8 md:gap-[clamp(40px,6vw,72px)]">
           <div className="flex flex-col gap-[25px]">
             {FIELDS.map((f) => (
               <div key={f.key}>
@@ -94,7 +94,7 @@ export function Simulator() {
               </div>
             ))}
           </div>
-          <div className="rounded-[8px] border border-line p-[clamp(28px,3vw,38px)] text-center">
+          <div className="w-full max-w-full rounded-[8px] border border-line p-4 sm:p-[clamp(28px,3vw,38px)] text-center">
             <span className="mb-4 block text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Estimated performance</span>
             <div className="font-mono text-[clamp(72px,10vw,104px)] font-semibold leading-[0.85] tracking-[-0.04em] text-ink">{score}</div>
             <div className="mt-[22px] h-1 overflow-hidden rounded-full bg-line">

@@ -59,7 +59,7 @@ function HeroCard() {
       }`}
     >
       <div
-        className="rounded-[8px] border border-line bg-white p-[clamp(24px,3vw,32px)]"
+        className="w-full max-w-full rounded-[8px] border border-line bg-white p-4 sm:p-[clamp(24px,3vw,32px)]"
         role="img"
         aria-label="Audit result for yoursite.com — overall score 97 of 100"
       >
@@ -115,7 +115,7 @@ export function Hero() {
   return (
     <section id="start" className="relative isolate flex min-h-[100svh] items-center overflow-hidden pb-[clamp(64px,8vw,110px)] pt-[calc(64px+clamp(40px,6vw,72px))] max-[920px]:min-h-0">
       <OrbitalBackdrop className="absolute inset-y-0 right-[-6%] -z-10 w-[64%] max-[920px]:hidden [mask-image:radial-gradient(68%_68%_at_56%_48%,#000_28%,transparent_80%)]" />
-      <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)] items-center gap-[clamp(40px,6vw,84px)] px-[clamp(24px,5vw,40px)] max-[920px]:grid-cols-1 max-[920px]:gap-[clamp(40px,7vw,56px)]">
+      <div className="relative z-10 mx-auto grid w-full max-w-[1200px] grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)] items-center gap-[clamp(40px,6vw,84px)] px-4 sm:px-[clamp(24px,5vw,40px)] max-[920px]:grid-cols-1 max-[920px]:gap-[clamp(40px,7vw,56px)]">
         <div>
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">
             Technical site audit

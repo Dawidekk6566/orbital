@@ -15,19 +15,19 @@ const H3_CLASS = "text-[clamp(24px,3vw,33px)] font-semibold leading-[1.12] track
 const DEEP_LEAD_CLASS = "mt-4 max-w-[56ch] text-[clamp(16px,1.3vw,18px)] leading-[1.6] text-gray-1";
 const LIST_CLASS = "mt-6 flex flex-col gap-[13px]";
 const LI_CLASS = "flex items-start gap-3 text-[15px] text-gray-1";
-const PANEL_CLASS = "overflow-hidden rounded-[8px] border border-line bg-white";
+const PANEL_CLASS = "w-full max-w-full overflow-hidden rounded-[8px] border border-line bg-white";
 const HEAD_CLASS =
-  "flex items-center justify-between border-b border-line px-5 py-[15px] font-mono text-[11.5px] uppercase tracking-[0.05em] text-muted";
+  "flex items-center justify-between border-b border-line px-3.5 sm:px-5 py-3 sm:py-[15px] font-mono text-[11px] sm:text-[11.5px] uppercase tracking-[0.05em] text-muted";
 const ISSUE_CLASS =
-  "grid grid-cols-[52px_1fr_auto] items-center gap-4 border-b border-line-2 px-5 py-[14px] font-mono text-[13px] transition-colors duration-150 last:border-b-0 hover:bg-bg-soft";
+  "grid grid-cols-[46px_minmax(0,1fr)_auto] sm:grid-cols-[52px_minmax(0,1fr)_auto] items-center gap-2.5 sm:gap-4 border-b border-line-2 px-3 sm:px-5 py-3 sm:py-[14px] font-mono text-[12px] sm:text-[13px] transition-colors duration-150 last:border-b-0 hover:bg-bg-soft";
 const PRIO_BASE = "rounded-[4px] border px-0 py-[3px] text-center text-[9.5px] uppercase tracking-[0.05em]";
 const RUN_CLASS =
-  "grid grid-cols-[auto_1fr_auto_auto] items-center gap-4 border-b border-line-2 px-5 py-[15px] font-mono text-[13px] transition-colors duration-150 last:border-b-0 hover:bg-bg-soft";
+  "grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-2.5 sm:gap-4 border-b border-line-2 px-3 sm:px-5 py-3 sm:py-[15px] font-mono text-[12px] sm:text-[13px] transition-colors duration-150 last:border-b-0 hover:bg-bg-soft";
 
 export function DeepDive() {
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="report">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Inside the report</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Not just a score. A plan.</h2>
@@ -69,27 +69,27 @@ export function DeepDive() {
               </div>
               <div className={ISSUE_CLASS}>
                 <span className={`${PRIO_BASE} border-ink text-ink`}>High</span>
-                <span className="truncate text-ink-2">Serve images in next-gen formats</span>
+                <span className="truncate min-w-0 text-ink-2">Serve images in next-gen formats</span>
                 <span className="text-right text-muted">+8 pts</span>
               </div>
               <div className={ISSUE_CLASS}>
                 <span className={`${PRIO_BASE} border-ink text-ink`}>High</span>
-                <span className="truncate text-ink-2">Eliminate render-blocking CSS</span>
+                <span className="truncate min-w-0 text-ink-2">Eliminate render-blocking CSS</span>
                 <span className="text-right text-muted">+6 pts</span>
               </div>
               <div className={ISSUE_CLASS}>
                 <span className={`${PRIO_BASE} border-muted text-gray-1`}>Med</span>
-                <span className="truncate text-ink-2">Set explicit width &amp; height on media</span>
+                <span className="truncate min-w-0 text-ink-2">Set explicit width &amp; height on media</span>
                 <span className="text-right text-muted">+3 pts</span>
               </div>
               <div className={ISSUE_CLASS}>
                 <span className={`${PRIO_BASE} border-muted text-gray-1`}>Med</span>
-                <span className="truncate text-ink-2">Reduce unused JavaScript</span>
+                <span className="truncate min-w-0 text-ink-2">Reduce unused JavaScript</span>
                 <span className="text-right text-muted">+3 pts</span>
               </div>
               <div className={ISSUE_CLASS}>
                 <span className={`${PRIO_BASE} border-line text-muted`}>Low</span>
-                <span className="truncate text-ink-2">Enable text compression</span>
+                <span className="truncate min-w-0 text-ink-2">Enable text compression</span>
                 <span className="text-right text-muted">+1 pt</span>
               </div>
             </div>
@@ -125,34 +125,34 @@ export function DeepDive() {
                 <span>Last 5 runs</span>
               </div>
               <div className={RUN_CLASS}>
-                <span className="text-muted">Sep 26</span>
-                <span className="h-[5px] overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "97%" }} /></span>
-                <span className="font-medium text-ink">97</span>
-                <span className="min-w-[52px] text-right text-muted">▲ +4</span>
+                <span className="text-muted flex-none">Sep 26</span>
+                <span className="h-[5px] min-w-0 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "97%" }} /></span>
+                <span className="font-medium text-ink flex-none">97</span>
+                <span className="min-w-[40px] sm:min-w-[52px] text-right text-muted flex-none">▲ +4</span>
               </div>
               <div className={RUN_CLASS}>
-                <span className="text-muted">Sep 19</span>
-                <span className="h-[5px] overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "93%" }} /></span>
-                <span className="font-medium text-ink">93</span>
-                <span className="min-w-[52px] text-right text-muted">▲ +2</span>
+                <span className="text-muted flex-none">Sep 19</span>
+                <span className="h-[5px] min-w-0 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "93%" }} /></span>
+                <span className="font-medium text-ink flex-none">93</span>
+                <span className="min-w-[40px] sm:min-w-[52px] text-right text-muted flex-none">▲ +2</span>
               </div>
               <div className={RUN_CLASS}>
-                <span className="text-muted">Sep 12</span>
-                <span className="h-[5px] overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "91%" }} /></span>
-                <span className="font-medium text-ink">91</span>
-                <span className="min-w-[52px] text-right text-muted">▼ −1</span>
+                <span className="text-muted flex-none">Sep 12</span>
+                <span className="h-[5px] min-w-0 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "91%" }} /></span>
+                <span className="font-medium text-ink flex-none">91</span>
+                <span className="min-w-[40px] sm:min-w-[52px] text-right text-muted flex-none">▼ −1</span>
               </div>
               <div className={RUN_CLASS}>
-                <span className="text-muted">Sep 05</span>
-                <span className="h-[5px] overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "92%" }} /></span>
-                <span className="font-medium text-ink">92</span>
-                <span className="min-w-[52px] text-right text-muted">▲ +7</span>
+                <span className="text-muted flex-none">Sep 05</span>
+                <span className="h-[5px] min-w-0 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "92%" }} /></span>
+                <span className="font-medium text-ink flex-none">92</span>
+                <span className="min-w-[40px] sm:min-w-[52px] text-right text-muted flex-none">▲ +7</span>
               </div>
               <div className={RUN_CLASS}>
-                <span className="text-muted">Aug 29</span>
-                <span className="h-[5px] overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "85%" }} /></span>
-                <span className="font-medium text-ink">85</span>
-                <span className="min-w-[52px] text-right text-muted">—</span>
+                <span className="text-muted flex-none">Aug 29</span>
+                <span className="h-[5px] min-w-0 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-ink" style={{ width: "85%" }} /></span>
+                <span className="font-medium text-ink flex-none">85</span>
+                <span className="min-w-[40px] sm:min-w-[52px] text-right text-muted flex-none">—</span>
               </div>
             </div>
           </div>

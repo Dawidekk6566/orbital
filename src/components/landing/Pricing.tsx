@@ -32,8 +32,9 @@ export function Pricing() {
             history, automation and seats, never for a better score.
           </p>
         </Reveal>
-        <Reveal className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-          <table className="w-full min-w-[640px] border-collapse text-[15px]">
+        <Reveal>
+          <div className="w-full max-w-full overflow-x-auto rounded-[8px] border border-line">
+            <table className="w-full min-w-[620px] border-collapse text-[14px] sm:text-[15px]">
             <thead>
               <tr>
                 <th className={TH_FEAT}>
@@ -130,6 +131,7 @@ export function Pricing() {
               </tr>
             </tbody>
           </table>
+          </div>
         </Reveal>
       </div>
     </section>
