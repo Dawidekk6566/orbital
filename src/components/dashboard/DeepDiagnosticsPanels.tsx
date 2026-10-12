@@ -265,6 +265,44 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
 /* ============================================================
    3. Card: DOM Tree Health & Complexity
    ============================================================ */
+function normalizeDomWarning(text: string): string {
+  if (!text) return text;
+  if (text.includes("Drzewo DOM zawiera")) {
+    return text.replace(
+      /Drzewo DOM zawiera aż (.*?) elementów \(limit: (.*?)\)\. Nadmierna liczba węzłów zwiększa zużycie pamięci i spowalnia reflows\./i,
+      "DOM tree contains $1 elements (limit: $2). Excessive nodes increase memory usage and slow down reflows."
+    );
+  }
+  if (text.includes("Liczba elementów DOM")) {
+    return text.replace(
+      /Liczba elementów DOM \((.*?)\) przekracza zalecany optymalny próg 800 węzłów\. Rozważ wirtualizację długich list i leniwe ładowanie komponentów\./i,
+      "DOM element count ($1) exceeds recommended threshold of 800 nodes. Consider virtualizing long lists and lazy-loading off-screen components."
+    );
+  }
+  if (text.includes("Maksymalna głębokość")) {
+    return text.replace(
+      /Maksymalna głębokość drzewa DOM wynosi (.*?) poziomów \(zalecane < (.*?)\)\. Zbyt głębokie zagnieżdżenie utrudnia silnikowi przeglądarki wyliczanie stylów CSS\./i,
+      "Maximum DOM tree depth is $1 levels (recommended < $2). Excessive nesting makes CSS style calculations significantly more expensive."
+    );
+  }
+  if (text.includes("Głębokość zagnieżdżenia DOM")) {
+    return text.replace(
+      /Głębokość zagnieżdżenia DOM \((.*?) poziomów\) zbliża się do granicy krytycznej\. Sprawdź zbędne kontenery <div> \(tzw\. "div soup"\)\./i,
+      "DOM nesting depth ($1 levels) approaches critical limit. Inspect and eliminate redundant container elements (\"div soup\")."
+    );
+  }
+  if (text.includes("Wykryto węzeł z")) {
+    return text.replace(
+      /Wykryto węzeł z (.*?) dziećmi bezpośrednimi\. Duża liczba rodzeństwa może powodować opóźnienia przy manipulacji DOM w trakcie animacji\./i,
+      "Detected a parent node with $1 direct child elements. A large number of siblings can cause frame drops during animations and layout reflows."
+    );
+  }
+  if (text.includes("Struktura DOM jest optymalna") || text.includes("Struktura DOM jest zwięzła")) {
+    return "DOM structure is optimal, compact, and optimized for rapid browser rendering.";
+  }
+  return text;
+}
+
 export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
   if (!domHealth) return null;
 
@@ -325,7 +363,7 @@ export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
         <div className="mt-4 space-y-2">
           {domHealth.warnings.map((w, idx) => (
             <p key={idx} className="text-[13px] text-muted leading-relaxed">
-              • {w}
+              • {normalizeDomWarning(w)}
             </p>
           ))}
         </div>

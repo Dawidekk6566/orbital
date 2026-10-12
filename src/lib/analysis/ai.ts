@@ -79,11 +79,11 @@ function normalize(parsed: z.infer<typeof AiOutputSchema>): AiResult {
   return { scores: parsed.scores, recommendations: recs };
 }
 
-const SYSTEM_PROMPT = (locale: Locale) => `Jesteś ekspertem od jakości stron WWW (wydajność, SEO, dostępność WCAG, bezpieczeństwo front-endu).
-Analizujesz dostarczony materiał i zwracasz WYŁĄCZNIE poprawny JSON, bez komentarzy, w formacie:
+const SYSTEM_PROMPT = (_locale?: Locale) => `You are an expert web performance, SEO, WCAG accessibility, and front-end security engineer.
+Analyze the provided material and return ONLY valid JSON matching this schema, without markdown formatting or code fences:
 {"scores":{"performance":0-100,"seo":0-100,"accessibility":0-100,"security":0-100},"recommendations":[{"category":"performance|seo|accessibility|security","severity":"critical|high|medium|low","title":"...","problem":"...","fix":"..."}]}
-Zasady: maks. 8 rekomendacji, najważniejsze najpierw; "fix" musi być konkretną, wykonalną instrukcją.
-Język pól tekstowych: ${locale === "pl" ? "polski" : "angielski"}.`;
+Rules: max 8 recommendations, highest priority first; "fix" must be a concrete, actionable instruction.
+Language of all text fields (title, problem, fix): ALWAYS English.`;
 
 /** Rekomendacje AI na podstawie kodu/plików. */
 export async function aiFromCode(
@@ -107,7 +107,7 @@ export async function aiFromCode(
       messages: [
         {
           role: "user",
-          content: `Przeanalizuj poniższy kod strony i zwróć JSON zgodnie z instrukcją.\n\n${combined}`,
+          content: `Analyze the following website code and return JSON according to the instructions.\n\n${combined}`,
         },
       ],
     });
@@ -154,9 +154,9 @@ export async function aiFromScreenshot(
             },
             {
               type: "text",
-              text: `Oceń wizualnie ten zrzut ekranu strony: layout, kontrast, hierarchia, czytelność, UX. ${
-                notes ? `Kontekst od autora: ${notes}. ` : ""
-              }Zwróć JSON zgodnie z instrukcją.`,
+              text: `Visually evaluate this website screenshot: layout, contrast, hierarchy, readability, UX. ${
+                notes ? `Author context: ${notes}. ` : ""
+              }Return JSON according to the instructions.`,
             },
           ],
         },
@@ -189,7 +189,7 @@ export async function aiRefineFromPageSpeed(
       messages: [
         {
           role: "user",
-          content: `Na podstawie surowego wyniku Lighthouse dla ${url} sformułuj priorytetowe rekomendacje (pole scores pomiń). Dane:\n${digest}`,
+          content: `Based on the raw Lighthouse result for ${url}, formulate priority recommendations in English (skip scores field if redundant). Data:\n${digest}`,
         },
       ],
     });

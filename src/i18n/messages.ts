@@ -5,7 +5,7 @@
 
 export const LOCALES = ["pl", "en"] as const;
 export type Locale = (typeof LOCALES)[number];
-export const DEFAULT_LOCALE: Locale = "pl";
+export const DEFAULT_LOCALE: Locale = "en";
 
 export const messages = {
   pl: {

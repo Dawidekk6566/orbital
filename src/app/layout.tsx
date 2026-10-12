@@ -23,21 +23,21 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Orbital — audyty techniczne stron, ocena 0–100",
+  title: "Orbital — Technical Website Audits, 0–100 Scoring",
   description:
-    "Prześlij URL, pliki, kod lub zrzut ekranu i otrzymaj dogłębną analizę wydajności, SEO, dostępności oraz bezpieczeństwa Twojej strony.",
+    "Submit a URL, files, code or screenshot and receive an in-depth audit of performance, SEO, accessibility, and security.",
   keywords: [
-    "audyt strony",
-    "analiza wydajności",
+    "website audit",
+    "performance analysis",
     "SEO",
-    "dostępność",
+    "accessibility",
     "Core Web Vitals",
     "Lighthouse",
   ],
   openGraph: {
     title: "Orbital",
     description:
-      "Techniczny analizator stron dla developerów — wydajność, SEO, dostępność i bezpieczeństwo.",
+      "Technical website analyzer for developers — performance, SEO, accessibility, and security.",
     type: "website",
   },
   icons: {

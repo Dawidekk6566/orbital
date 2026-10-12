@@ -26,6 +26,10 @@ import {
   ConsoleIssuesPanel,
 } from "./DeepDiagnosticsPanels";
 import { AuditNavTabs } from "./AuditNavTabs";
+import {
+  normalizeLegacyMetric,
+  normalizeLegacyRecommendation,
+} from "@/lib/analysis/legacyNormalizer";
 
 /* ============================================================
    Dashboard wyników — 1:1 z dashboard.html (light-monochrome),
@@ -602,10 +606,17 @@ export function ResultsDashboard({
     embedded ? "scroll-mt-[200px]" : "scroll-mt-[140px]"
   }`;
 
-  const catOf = (k: CategoryKey) => report.categories.find((c) => c.key === k);
-  const recs = [...report.recommendations].sort(
-    (a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity],
-  );
+  const catOf = (k: CategoryKey) => {
+    const found = report.categories.find((c) => c.key === k);
+    if (!found) return undefined;
+    return {
+      ...found,
+      metrics: found.metrics.map(normalizeLegacyMetric),
+    };
+  };
+  const recs = report.recommendations
+    .map(normalizeLegacyRecommendation)
+    .sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]);
   const perf = catOf("performance");
   const perfMetrics = perf?.metrics ?? [];
   const vitalMetrics = perfMetrics.filter((m) => VITAL_IDS.has(m.id));
