@@ -116,6 +116,7 @@ html {
   /* Kosmiczna baza — automatycznie dopasowana do motywu (biel na light mode, głęboka czerń na dark mode) */
   background-color: var(--color-void);
   transition: background-color 0.3s ease;
+  overflow-x: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

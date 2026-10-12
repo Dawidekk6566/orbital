@@ -38,7 +38,7 @@ import {
    ============================================================ */
 
 const GAUGE_C = 628.32;
-const WRAP = "mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]";
+const WRAP = "mx-auto max-w-[1200px] px-4 sm:px-6 md:px-8";
 const RSEC_HEAD = "mb-[30px] flex flex-wrap items-baseline justify-between gap-4";
 const RSEC_H2 = "text-[clamp(22px,3vw,30px)] font-semibold tracking-[-0.02em]";
 const RSEC_NOTE = "font-mono text-[12.5px] text-muted";
@@ -223,7 +223,7 @@ function Opp({
   return (
     <div className="border-t border-line [&:first-child]:border-t-0">
       <button
-        className="grid w-full grid-cols-[26px_1fr_auto_auto] items-center gap-[14px] px-5 py-[18px] text-left transition-[background] duration-150 hover:bg-bg-soft max-[560px]:grid-cols-[22px_1fr]"
+        className="grid w-full grid-cols-[26px_1fr_auto] items-center gap-3 sm:gap-[14px] px-3.5 sm:px-5 py-3.5 sm:py-[18px] text-left transition-[background] duration-150 hover:bg-bg-soft max-[560px]:grid-cols-[22px_1fr]"
         onClick={onToggle}
         aria-expanded={open}
       >
@@ -231,13 +231,15 @@ function Opp({
           className={`relative h-4 w-4 flex-none before:absolute before:left-0 before:top-[7px] before:h-0.5 before:w-4 before:rounded-[2px] before:bg-ink before:content-[''] after:absolute after:left-[7px] after:top-0 after:h-4 after:w-0.5 after:rounded-[2px] after:bg-ink after:transition-transform after:duration-[250ms] after:content-[''] motion-reduce:after:transition-none ${open ? "after:rotate-90 after:scale-x-0" : ""}`}
           aria-hidden="true"
         />
-        <span className="min-w-0 text-[15px] font-medium">{rec.title}</span>
-        <span className="whitespace-nowrap font-mono tabular-nums text-[12px] text-muted max-[560px]:col-start-2 max-[560px]:justify-self-start">{CATEGORY_LABEL[rec.category]}</span>
-        <span className={`whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.04em] max-[560px]:col-start-2 max-[560px]:justify-self-start ${gainColor}`}>{rec.severity}</span>
+        <span className="min-w-0 text-[14.5px] sm:text-[15px] font-medium break-words">{rec.title}</span>
+        <div className="flex flex-wrap items-center gap-2 max-[560px]:col-start-2 max-[560px]:mt-1.5">
+          <span className="whitespace-nowrap font-mono tabular-nums text-[12px] text-muted">{CATEGORY_LABEL[rec.category]}</span>
+          <span className={`whitespace-nowrap rounded-full border px-2.5 py-0.5 font-mono text-[10.5px] uppercase tracking-[0.04em] ${gainColor}`}>{rec.severity}</span>
+        </div>
       </button>
       <div className={`grid transition-[grid-template-rows] duration-300 motion-reduce:transition-none ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
         <div className="overflow-hidden">
-          <div className="pb-5 pl-[60px] pr-5 pt-0 text-[14.5px] leading-[1.6] text-gray-1 max-[560px]:pl-5">
+          <div className="pb-5 pl-[42px] sm:pl-[60px] pr-3.5 sm:pr-5 pt-0 text-[14px] sm:text-[14.5px] leading-[1.6] text-gray-1 max-[560px]:pl-4">
             {rec.evidence && (
               <p className="mt-1 font-mono text-[12.5px] text-muted">On your page: {rec.evidence}</p>
             )}
@@ -364,15 +366,15 @@ function MetricRow({ metric }: { metric: Metric }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="grid w-full grid-cols-[18px_1fr_auto_14px] items-center gap-3 rounded-[6px] px-3 py-[12px] text-left transition-colors duration-150 hover:bg-bg-soft"
+        className="grid w-full grid-cols-[18px_1fr_auto_14px] items-center gap-2.5 sm:gap-3 rounded-[6px] px-2.5 sm:px-3 py-3 text-left transition-colors duration-150 hover:bg-bg-soft"
       >
         <span className={`flex h-[18px] w-[18px] flex-none items-center justify-center rounded-full text-[10px] leading-none ${iconCls}`}>
           {icon}
         </span>
-        <span className={`min-w-0 text-[14px] leading-[1.4] ${st === "bad" ? "text-bad" : "text-ink"}`}>
+        <span className={`min-w-0 text-[13.5px] sm:text-[14px] leading-[1.4] break-words ${st === "bad" ? "text-bad" : "text-ink"}`}>
           {metric.label}
         </span>
-        <span className="whitespace-nowrap font-mono tabular-nums text-[12.5px] text-muted">
+        <span className="truncate max-w-[95px] sm:max-w-none text-right font-mono tabular-nums text-[12px] sm:text-[12.5px] text-muted">
           {metric.value}
           {metric.unit ? ` ${metric.unit}` : ""}
         </span>
@@ -768,16 +770,18 @@ export function ResultsDashboard({
         style={{ top: embedded ? "var(--app-header-h, 64px)" : 0 }}
       >
       <div className="mx-auto max-w-[1360px] px-3 sm:px-6">
-        <div className="flex flex-wrap items-start justify-between gap-6 pt-3 pb-4">
-          <div className="min-w-0">
-            <div className="flex items-center gap-[10px] font-mono tabular-nums text-[15px] text-ink">
-              <span className={`h-[9px] w-[9px] flex-none rounded-full transition-[background] duration-500 ${DOT_BG[bandOf(overall)]}`} aria-hidden="true" />
-              {report.target.value}
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-6 py-2.5 sm:py-3.5">
+          <div className="min-w-0 max-w-full">
+            <div className="flex items-center gap-2 font-mono tabular-nums text-[13.5px] sm:text-[15px] text-ink max-w-full">
+              <span className={`h-[8px] w-[8px] sm:h-[9px] sm:w-[9px] flex-none rounded-full transition-[background] duration-500 ${DOT_BG[bandOf(overall)]}`} aria-hidden="true" />
+              <span className="truncate max-w-[200px] xs:max-w-[280px] sm:max-w-md md:max-w-xl" title={report.target.value}>
+                {report.target.value}
+              </span>
             </div>
-            <div className="mt-[10px] flex flex-wrap gap-x-4 gap-y-[6px] font-mono text-[12.5px] text-muted">
+            <div className="mt-1 flex flex-wrap gap-x-2.5 sm:gap-x-4 gap-y-1 font-mono text-[11px] sm:text-[12.5px] text-muted">
               <span>{report.meta.engine}</span>
               <span>·</span>
-              <span>{analyzedAt}</span>
+              <span className="truncate max-w-[140px] sm:max-w-none">{analyzedAt}</span>
               {report.meta.demo && (
                 <>
                   <span>·</span>
@@ -786,10 +790,10 @@ export function ResultsDashboard({
               )}
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-[14px]">
-            <div className="inline-flex rounded-full border border-line p-[3px]" role="tablist" aria-label="Device">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3.5">
+            <div className="inline-flex rounded-full border border-line p-[2px] sm:p-[3px]" role="tablist" aria-label="Device">
               <button
-                className={`rounded-full px-[14px] py-1.5 font-mono text-[13px] transition-[background,color] duration-[180ms] ${device === "mobile" ? "bg-ink text-white" : "text-gray-1"}`}
+                className={`rounded-full px-2.5 sm:px-[14px] py-1 sm:py-1.5 font-mono text-[11.5px] sm:text-[13px] transition-[background,color] duration-[180ms] ${device === "mobile" ? "bg-ink text-white" : "text-gray-1"}`}
                 role="tab"
                 aria-selected={device === "mobile"}
                 onClick={() => setDevice("mobile")}
@@ -797,7 +801,7 @@ export function ResultsDashboard({
                 Mobile
               </button>
               <button
-                className={`rounded-full px-[14px] py-1.5 font-mono text-[13px] transition-[background,color] duration-[180ms] ${device === "desktop" ? "bg-ink text-white" : "text-gray-1"}`}
+                className={`rounded-full px-2.5 sm:px-[14px] py-1 sm:py-1.5 font-mono text-[11.5px] sm:text-[13px] transition-[background,color] duration-[180ms] ${device === "desktop" ? "bg-ink text-white" : "text-gray-1"}`}
                 role="tab"
                 aria-selected={device === "desktop"}
                 onClick={() => setDevice("desktop")}
@@ -807,7 +811,7 @@ export function ResultsDashboard({
             </div>
             {showReset && report.target.mode === "url" && (
               <button
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-[11px] text-[15px] font-medium transition-[background,transform,color] duration-[180ms]"
+                className="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full border border-line px-3 sm:px-5 py-1 sm:py-[9px] text-[12.5px] sm:text-[14px] font-medium transition-[background,transform,color] duration-[180ms] hover:border-ink"
                 onClick={rerun}
               >
                 Re-run

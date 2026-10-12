@@ -69,19 +69,19 @@ export function NetworkWaterfall({
   ];
 
   return (
-    <div className="rounded-[8px] border border-line bg-white p-5">
+    <div className="rounded-[8px] border border-line bg-white p-3.5 sm:p-5">
       {/* Top statistics overview bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 border-b border-line pb-4">
         <div>
-          <h3 className="font-mono text-[12.5px] uppercase tracking-[0.05em] text-muted">
+          <h3 className="font-mono text-[12px] sm:text-[12.5px] uppercase tracking-[0.05em] text-muted">
             Network Waterfall &amp; Resource Timeline
           </h3>
-          <p className="mt-0.5 text-[13px] text-gray-1">
+          <p className="mt-0.5 text-[12.5px] sm:text-[13px] text-gray-1">
             Visual breakdown of all assets requested during page load.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 font-mono text-[12px]">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 font-mono text-[11.5px] sm:text-[12px]">
           <div>
             <span className="text-muted">Requests: </span>
             <strong className="text-ink">{entries.length}</strong>
@@ -99,13 +99,13 @@ export function NetworkWaterfall({
 
       {/* Controls: Search & Category Filter Pills */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="inline-flex rounded-full border border-line p-[2px]">
+        <div className="inline-flex flex-wrap rounded-full border border-line p-[2px]">
           {FILTERS.map((f) => (
             <button
               key={f.id}
               type="button"
               onClick={() => setFilter(f.id)}
-              className={`rounded-full px-3 py-1 font-mono text-[11.5px] transition-colors ${
+              className={`rounded-full px-2.5 sm:px-3 py-1 font-mono text-[11px] sm:text-[11.5px] transition-colors ${
                 filter === f.id ? "bg-ink text-white" : "text-gray-1 hover:text-ink"
               }`}
             >
@@ -114,13 +114,13 @@ export function NetworkWaterfall({
           ))}
         </div>
 
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Filter by name / domain..."
-            className="w-[200px] rounded-full border border-line bg-bg-soft px-3 py-1 text-[12px] font-mono outline-none transition-colors focus:border-ink"
+            className="w-full sm:w-[200px] rounded-full border border-line bg-bg-soft px-3 py-1 text-[12px] font-mono outline-none transition-colors focus:border-ink"
           />
         </div>
       </div>

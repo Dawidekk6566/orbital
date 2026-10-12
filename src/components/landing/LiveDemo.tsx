@@ -138,7 +138,7 @@ export function LiveDemo() {
 
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="demo">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Live demo</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Run an audit right here.</h2>
@@ -148,17 +148,19 @@ export function LiveDemo() {
           </p>
         </Reveal>
         <Reveal className="overflow-hidden rounded-[8px] border border-line bg-white">
-          <div className="flex flex-wrap items-center gap-[14px] border-b border-line px-[18px] py-4">
-            <span className="flex flex-none items-center w-[calc(21ch+30px)] rounded-[6px] border border-line bg-bg-soft px-[14px] py-[9px] font-mono text-[14px] whitespace-nowrap">
-              <span className="text-faint">https://</span>
-              <span className="text-ink">{preset.host}</span>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-[14px] border-b border-line px-3.5 sm:px-[18px] py-4">
+            <span className="flex items-center w-full sm:w-auto min-w-0 rounded-[6px] border border-line bg-bg-soft px-3 sm:px-[14px] py-2 font-mono text-[13.5px] sm:text-[14px]">
+              <span className="truncate">
+                <span className="text-faint">https://</span>
+                <span className="text-ink">{preset.host}</span>
+              </span>
             </span>
-            <span className="flex flex-wrap items-center gap-2">
+            <span className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <span className="mr-0.5 font-mono text-[12px] text-muted max-[600px]:hidden">Try</span>
               {(Object.keys(PRESETS) as (keyof typeof PRESETS)[]).map((key) => (
                 <button
                   key={key}
-                  className={`whitespace-nowrap rounded-full border px-[13px] py-1.5 font-mono text-[12.5px] transition-[border-color,color,background] duration-150 ${
+                  className={`whitespace-nowrap rounded-full border px-2.5 sm:px-[13px] py-1 sm:py-1.5 font-mono text-[12px] sm:text-[12.5px] transition-[border-color,color,background] duration-150 ${
                     current === key
                       ? "border-ink bg-ink text-white"
                       : "border-line text-gray-1 hover:border-muted hover:text-ink"
@@ -171,7 +173,7 @@ export function LiveDemo() {
               ))}
             </span>
             <button
-              className="ml-auto inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-[11px] text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222] max-[920px]:ml-0 max-[920px]:flex-1"
+              className="w-full sm:w-auto ml-auto inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-[11px] text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222] max-[920px]:ml-0 max-[920px]:w-full"
               type="button"
               onClick={run}
               disabled={running}
@@ -191,7 +193,7 @@ export function LiveDemo() {
               )}
             </button>
           </div>
-          <div className="p-[clamp(20px,3vw,30px)]">
+          <div className="p-4 sm:p-[clamp(20px,3vw,30px)]">
             <div className="mb-6 h-[3px] overflow-hidden rounded-full bg-line" aria-hidden="true">
               <span className="block h-full rounded-full bg-ink transition-[width] duration-[400ms] ease-[ease] motion-reduce:transition-none" style={{ width: `${progress}%` }} />
             </div>

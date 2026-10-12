@@ -53,7 +53,7 @@ export function AuditForm({
         }`}
       >
         <input
-          className={`min-w-0 flex-1 border-none bg-transparent px-[18px] py-[15px] font-mono text-[16px] outline-none ${
+          className={`min-w-0 flex-1 border-none bg-transparent px-3 sm:px-[18px] py-3 sm:py-[15px] font-mono text-[14.5px] sm:text-[16px] outline-none ${
             onDark
               ? "text-white placeholder:text-white/40"
               : "text-ink placeholder:text-faint"
@@ -67,7 +67,7 @@ export function AuditForm({
           onChange={(e) => setUrl(e.target.value)}
         />
         <button
-          className={`flex items-center gap-2 rounded-r-[7px] px-[22px] text-[15px] font-medium transition-colors duration-[180ms] ${
+          className={`flex items-center gap-2 rounded-r-[7px] px-3.5 sm:px-[22px] text-[14px] sm:text-[15px] font-medium transition-colors duration-[180ms] ${
             onDark
               ? "bg-white text-ink hover:bg-[#f0f0f0]"
               : "bg-ink text-white hover:bg-[#222]"

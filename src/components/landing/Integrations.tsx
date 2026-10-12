@@ -17,8 +17,8 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 const TAB_BASE =
-  "rounded-t-[6px] px-4 py-2.5 font-mono text-[13px] transition-[color,background] duration-150";
-const PRE_CLASS = "whitespace-pre font-mono text-[13.5px] leading-[1.75] text-[#e6e6e6]";
+  "rounded-t-[6px] px-3 sm:px-4 py-2 sm:py-2.5 font-mono text-[12px] sm:text-[13px] transition-[color,background] duration-150";
+const PRE_CLASS = "whitespace-pre font-mono text-[12px] sm:text-[13.5px] leading-[1.75] text-[#e6e6e6]";
 
 export function Integrations() {
   const [current, setCurrent] = useState<Tab>("cli");
@@ -53,7 +53,7 @@ export function Integrations() {
 
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="integrations">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Integrations</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Runs where your code already lives.</h2>
@@ -79,13 +79,13 @@ export function Integrations() {
             ))}
             <button
               type="button"
-              className="mb-2 ml-auto self-center rounded-[6px] border border-line px-[13px] py-[7px] font-mono text-[12px] text-muted transition-[border-color,color] duration-150 hover:border-ink hover:text-ink"
+              className="mb-2 ml-auto self-center rounded-[6px] border border-line px-2.5 sm:px-[13px] py-1 sm:py-[7px] font-mono text-[11.5px] sm:text-[12px] text-muted transition-[border-color,color] duration-150 hover:border-ink hover:text-ink"
               onClick={copy}
             >
               {copied ? "Copied" : "Copy"}
             </button>
           </div>
-          <div className="theme-fixed overflow-x-auto rounded-b-[8px] bg-ink p-[clamp(20px,2.5vw,28px)]" ref={surface}>
+          <div className="theme-fixed overflow-x-auto rounded-b-[8px] bg-ink p-3.5 sm:p-[clamp(20px,2.5vw,28px)]" ref={surface}>
             <pre className={PRE_CLASS} data-code-panel="cli" hidden={current !== "cli"}>
               <span className="text-[#888]">{`# install once`}</span>
               {`

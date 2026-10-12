@@ -25,7 +25,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
   const bloatList = showAllBloat ? budget.bloatItems : budget.bloatItems.slice(0, 5);
 
   return (
-    <section className="rounded-[10px] border border-line bg-white p-6 transition-colors">
+    <section className="rounded-[10px] border border-line bg-white p-4 sm:p-6 transition-colors">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
         <div>
           <div className="flex items-center gap-2.5">
@@ -41,7 +41,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
           </p>
         </div>
         {budget.totalWastedBytes > 0 && (
-          <div className="flex items-center gap-2 rounded-full border border-warn-line bg-warn-soft px-3 py-1 text-[12px] font-medium text-warn">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 rounded-full border border-warn-line bg-warn-soft px-3 py-1 text-[11.5px] sm:text-[12px] font-medium text-warn">
             <span>Potential savings: {formatBytes(budget.totalWastedBytes)}</span>
             <span className="text-muted">·</span>
             <span>~{budget.potentialTimeSavingsMs}ms faster</span>
@@ -64,9 +64,9 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
 
           return (
             <div key={b.name} className="space-y-1.5">
-              <div className="flex items-center justify-between text-[13px]">
+              <div className="flex flex-wrap items-center justify-between gap-1 text-[13px]">
                 <span className="font-medium text-ink">{b.name}</span>
-                <div className="flex items-center gap-2 font-mono text-[12px]">
+                <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11.5px] sm:text-[12px]">
                   <span className="text-ink">{formatBytes(b.actualBytes)}</span>
                   <span className="text-muted">/ budget {formatBytes(b.budgetBytes)}</span>
                   <span
@@ -119,7 +119,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
                 {bloatList.map((item, idx) => (
                   <tr key={idx} className="hover:bg-bg-soft/50">
                     <td className="py-2.5 pr-4 font-sans font-medium text-ink">
-                      <span className="block truncate max-w-[280px] sm:max-w-[420px]" title={item.url}>
+                      <span className="block truncate max-w-[170px] xs:max-w-[240px] sm:max-w-[420px]" title={item.url}>
                         {item.label}
                       </span>
                     </td>
@@ -172,7 +172,7 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
   const firstPartyPercent = totalBytes > 0 ? 100 - summary.thirdPartyPercent : 100;
 
   return (
-    <section className="rounded-[10px] border border-line bg-white p-6 transition-colors">
+    <section className="rounded-[10px] border border-line bg-white p-4 sm:p-6 transition-colors">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
         <div>
           <div className="flex items-center gap-2.5">
@@ -187,7 +187,7 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
             Share of third-party assets in transfer size and main thread CPU execution time.
           </p>
         </div>
-        <div className="flex items-center gap-3 font-mono text-[12px]">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-[11.5px] sm:text-[12px]">
           <span className="flex items-center gap-1.5 text-ink">
             <span className="h-2.5 w-2.5 rounded-full bg-ink" />
             1st party: {firstPartyPercent}%
@@ -213,7 +213,7 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
             title={`3rd-party services: ${summary.thirdPartyPercent}% (${formatBytes(summary.thirdPartyBytes)})`}
           />
         </div>
-        <div className="mt-2 flex items-center justify-between font-mono text-[11.5px] text-muted">
+        <div className="mt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-mono text-[11px] sm:text-[11.5px] text-muted">
           <span>1st party: {formatBytes(summary.firstPartyBytes)} ({summary.firstPartyMainThreadMs}ms CPU)</span>
           <span>3rd party: {formatBytes(summary.thirdPartyBytes)} ({summary.thirdPartyMainThreadMs}ms CPU)</span>
         </div>
@@ -310,7 +310,7 @@ export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
   const isWarn = domHealth.status === "warn";
 
   return (
-    <section className="rounded-[10px] border border-line bg-white p-6 transition-colors">
+    <section className="rounded-[10px] border border-line bg-white p-4 sm:p-6 transition-colors">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
         <div>
           <div className="flex items-center gap-2.5">
@@ -379,7 +379,7 @@ export function ConsoleIssuesPanel({ issues }: { issues?: ConsoleIssue[] }) {
   if (!issues || issues.length === 0) return null;
 
   return (
-    <section className="rounded-[10px] border border-line bg-white p-6 transition-colors">
+    <section className="rounded-[10px] border border-line bg-white p-4 sm:p-6 transition-colors">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4">
         <div>
           <div className="flex items-center gap-2.5">
@@ -425,7 +425,7 @@ export function ConsoleIssuesPanel({ issues }: { issues?: ConsoleIssue[] }) {
               <div className="min-w-0 flex-1">
                 <p className="break-words font-sans text-[13px] text-ink">{issue.message}</p>
                 {issue.url && (
-                  <p className="mt-1 truncate text-[11px] text-muted" title={issue.url}>
+                  <p className="mt-1 break-all text-[11px] text-muted" title={issue.url}>
                     {issue.url}
                   </p>
                 )}

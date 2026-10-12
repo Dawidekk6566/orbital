@@ -112,7 +112,7 @@ const FILTERS: { cat: Cat | "all"; label: string }[] = [
 const CHIP_BASE =
   "whitespace-nowrap rounded-full border px-[13px] py-1.5 font-mono text-[12.5px] transition-[border-color,color,background] duration-150";
 const ROW_CLASS =
-  "grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 px-1 py-[19px] text-left transition-colors duration-150 hover:bg-bg-soft";
+  "grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4 px-1 py-4 sm:py-[19px] text-left transition-colors duration-150 hover:bg-bg-soft";
 const PLUS_BASE =
   "relative h-4 w-4 flex-none transition-colors duration-200 " +
   "before:absolute before:left-0 before:top-[7px] before:h-0.5 before:w-4 before:rounded-[2px] before:bg-current before:content-[''] " +
@@ -124,7 +124,7 @@ export function ChecksExplorer() {
 
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="checks">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">The checks</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Every rule, in the open.</h2>
@@ -171,10 +171,10 @@ export function ChecksExplorer() {
                       }`}
                       aria-hidden="true"
                     />
-                    <span className="text-[16px] font-medium tracking-[-0.01em] text-ink">{c.title}</span>
-                    <span className="flex items-center gap-[14px] font-mono text-[12px] max-[600px]:gap-[10px]">
+                    <span className="min-w-0 break-words text-[15px] sm:text-[16px] font-medium tracking-[-0.01em] text-ink">{c.title}</span>
+                    <span className="flex items-center gap-2 sm:gap-[14px] font-mono text-[12px]">
                       <span className="whitespace-nowrap rounded-[4px] border border-line px-2 py-[3px] text-[10px] uppercase tracking-[0.05em] text-muted max-[600px]:hidden">{c.catLabel}</span>
-                      <span className="min-w-[50px] text-right text-ink">{c.gain}</span>
+                      <span className="min-w-[44px] sm:min-w-[50px] text-right text-ink font-semibold">{c.gain}</span>
                     </span>
                   </button>
                   <div
@@ -184,8 +184,8 @@ export function ChecksExplorer() {
                   >
                     <div className="min-h-0 overflow-hidden">
                       <div className="max-w-[74ch] px-1 pb-[26px]">
-                        <p className="text-[15px] leading-[1.62] text-gray-1">{c.body}</p>
-                        <div className="theme-fixed mt-4 overflow-x-auto whitespace-pre rounded-[6px] bg-ink px-[18px] py-[15px] font-mono text-[12.5px] leading-[1.7] text-[#e6e6e6]">{c.code}</div>
+                        <p className="text-[14.5px] sm:text-[15px] leading-[1.62] text-gray-1">{c.body}</p>
+                        <div className="theme-fixed mt-4 max-w-full overflow-x-auto whitespace-pre rounded-[6px] bg-ink px-3.5 sm:px-[18px] py-3 sm:py-[15px] font-mono text-[12px] sm:text-[12.5px] leading-[1.7] text-[#e6e6e6]">{c.code}</div>
                       </div>
                     </div>
                   </div>

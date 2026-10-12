@@ -31,9 +31,9 @@ export function Navbar({ isAuthed = false }: { isAuthed?: boolean }) {
       }`}
       id="nav"
     >
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-6 px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-3 sm:gap-6 px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Link
-          className="flex items-center gap-2.5 text-[18px] font-semibold tracking-[-0.02em]"
+          className="flex items-center gap-2 text-[17px] sm:text-[18px] font-semibold tracking-[-0.02em]"
           href="/#top"
           aria-label="Orbital home"
         >
@@ -68,14 +68,14 @@ export function Navbar({ isAuthed = false }: { isAuthed?: boolean }) {
             Dashboard
           </Link>
         </nav>
-        <div className="flex items-center gap-[14px]">
+        <div className="flex items-center gap-2 sm:gap-[14px]">
           <ThemeToggle />
           {isAuthed ? (
             <Link
-              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-[11px] text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222]"
+              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-3.5 sm:px-5 py-2 sm:py-[11px] text-[13.5px] sm:text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222]"
               href="/dashboard"
             >
-              Go to dashboard
+              Dashboard
             </Link>
           ) : (
             <>
@@ -86,7 +86,7 @@ export function Navbar({ isAuthed = false }: { isAuthed?: boolean }) {
                 Sign in
               </Link>
               <Link
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-5 py-[11px] text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222]"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ink px-3.5 sm:px-5 py-2 sm:py-[11px] text-[13.5px] sm:text-[15px] font-medium text-white transition-colors duration-[180ms] hover:bg-[#222]"
                 href="/signup"
               >
                 Get started

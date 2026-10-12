@@ -23,7 +23,7 @@ const BTN_PRIMARY = `${BTN_BASE} bg-ink text-white hover:bg-[#222]`;
 export function Pricing() {
   return (
     <section className="py-[clamp(52px,6.5vw,92px)]" id="pricing">
-      <div className="mx-auto max-w-[1200px] px-[clamp(24px,5vw,40px)]">
+      <div className="mx-auto max-w-[1200px] px-4 sm:px-[clamp(24px,5vw,40px)]">
         <Reveal className="mb-[clamp(30px,3.8vw,48px)] max-w-[660px]">
           <span className="text-[12px] font-medium uppercase tracking-[0.08em] text-muted">Pricing</span>
           <h2 className="mt-4 text-[clamp(30px,4vw,46px)] font-semibold leading-[1.08] tracking-[-0.025em]">Start free. Scale when it matters.</h2>
@@ -32,7 +32,7 @@ export function Pricing() {
             history, automation and seats, never for a better score.
           </p>
         </Reveal>
-        <Reveal className="overflow-x-auto">
+        <Reveal className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
           <table className="w-full min-w-[640px] border-collapse text-[15px]">
             <thead>
               <tr>

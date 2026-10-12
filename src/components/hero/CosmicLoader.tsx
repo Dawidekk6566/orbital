@@ -133,16 +133,16 @@ export function CosmicLoader({
     <div
       role="status"
       aria-live="polite"
-      className="mx-auto w-full max-w-[740px] rounded-[16px] border border-line bg-white p-5 shadow-2xl backdrop-blur-xl sm:p-8 dark:bg-[#121316] dark:border-[#26282d]"
+      className="mx-auto w-full max-w-[740px] rounded-[16px] border border-line bg-white p-4 shadow-2xl backdrop-blur-xl sm:p-6 md:p-8 dark:bg-[#121316] dark:border-[#26282d]"
     >
       {/* Header bar: Engine badge, target indicator & timer */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-4 dark:border-[#26282d]">
-        <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-line pb-3 sm:pb-4 dark:border-[#26282d]">
+        <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
           </span>
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink">
+          <span className="font-mono text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.08em] text-ink">
             Orbital Diagnostic Engine
           </span>
           <span className="hidden rounded-full border border-line px-2 py-0.5 font-mono text-[10px] text-muted sm:inline-block dark:border-[#26282d]">
@@ -150,7 +150,7 @@ export function CosmicLoader({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 font-mono text-[11.5px] text-muted">
+        <div className="flex items-center gap-2 font-mono text-[11px] sm:text-[11.5px] text-muted">
           <span className="rounded bg-bg-soft px-2 py-0.5 tabular-nums text-ink dark:bg-[#18191d]">
             ⏱ {(elapsedMs / 1000).toFixed(1)}s elapsed
           </span>
@@ -169,23 +169,23 @@ export function CosmicLoader({
       </div>
 
       {/* Target resource pill */}
-      <div className="mt-4 flex items-center justify-between gap-3 rounded-[8px] border border-line-2 bg-bg-soft/70 px-3.5 py-2 font-mono text-[12px] text-gray-1 dark:bg-[#16171a] dark:border-[#222428]">
+      <div className="mt-3 sm:mt-4 flex items-center justify-between gap-2.5 rounded-[8px] border border-line-2 bg-bg-soft/70 px-3 py-1.5 sm:px-3.5 sm:py-2 font-mono text-[11.5px] sm:text-[12px] text-gray-1 dark:bg-[#16171a] dark:border-[#222428]">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="text-muted">Target:</span>
+          <span className="text-muted flex-none">Target:</span>
           <span className="truncate font-semibold text-ink" title={targetLabel}>
             {targetLabel}
           </span>
         </div>
-        <span className="flex-none rounded-full border border-line bg-white px-2 py-0.5 text-[10.5px] text-muted dark:bg-[#121316] dark:border-[#26282d]">
+        <span className="flex-none rounded-full border border-line bg-white px-2 py-0.5 text-[10px] sm:text-[10.5px] text-muted dark:bg-[#121316] dark:border-[#26282d]">
           {isFinalizing ? "Compiling" : "In Progress"}
         </span>
       </div>
 
       {/* Centerpiece: Celestial Radar Scope & Active Diagnostic Card */}
-      <div className="mt-6 grid grid-cols-1 items-center gap-6 sm:grid-cols-[180px_1fr]">
+      <div className="mt-5 sm:mt-6 grid grid-cols-1 items-center gap-5 sm:gap-6 sm:grid-cols-[170px_1fr]">
         {/* Celestial Radar Scope */}
         <div className="flex flex-col items-center justify-center">
-          <div className="relative flex h-[170px] w-[170px] items-center justify-center">
+          <div className="relative flex h-[140px] w-[140px] sm:h-[170px] sm:w-[170px] items-center justify-center">
             {/* SVG Concentric Radar Rings */}
             <svg
               viewBox="0 0 200 200"
@@ -414,7 +414,7 @@ export function CosmicLoader({
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="mt-2.5 flex items-center justify-between font-mono text-[11px] text-muted">
+        <div className="mt-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-mono text-[11px] text-muted">
           <span>
             {isFinalizing
               ? "Synthesizing full audit report & scorecard…"
