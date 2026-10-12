@@ -13,6 +13,7 @@ export type AnalysisStatus = "idle" | "loading" | "done" | "error";
 
 interface AnalysisState {
   status: AnalysisStatus;
+  request: AnalyzeRequest | null;
   report: AnalysisReport | null;
   error: string | null;
   analyze: (request: AnalyzeRequest, locale?: Locale) => Promise<void>;
@@ -22,11 +23,12 @@ interface AnalysisState {
 
 export const useAnalysisStore = create<AnalysisState>((set) => ({
   status: "idle",
+  request: null,
   report: null,
   error: null,
 
-  analyze: async (request, locale = "pl") => {
-    set({ status: "loading", error: null });
+  analyze: async (request, locale = "en") => {
+    set({ status: "loading", request, error: null });
     try {
       const res = await fetch("/api/analyze", {
         method: "POST",
@@ -48,8 +50,8 @@ export const useAnalysisStore = create<AnalysisState>((set) => ({
   },
 
   loadDemo: () => {
-    set({ status: "done", report: buildDemoReport(), error: null });
+    set({ status: "done", request: { mode: "url", url: "https://example.com" }, report: buildDemoReport(), error: null });
   },
 
-  reset: () => set({ status: "idle", report: null, error: null }),
+  reset: () => set({ status: "idle", request: null, report: null, error: null }),
 }));
