@@ -15,7 +15,7 @@ function formatBytes(bytes: number): string {
 }
 
 /* ============================================================
-   1. Karta: Performance Budget & Code Bloat
+   1. Card: Performance Budget & Code Bloat
    ============================================================ */
 export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
   const [showAllBloat, setShowAllBloat] = useState(false);
@@ -37,19 +37,19 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
             </span>
           </div>
           <p className="mt-1 text-[13px] text-muted">
-            Kontrola limitów wagowych zasobów oraz eliminacja nieużywanego kodu JS i CSS.
+            Transfer budget limits and elimination of unused JS and CSS code.
           </p>
         </div>
         {budget.totalWastedBytes > 0 && (
           <div className="flex items-center gap-2 rounded-full border border-warn-line bg-warn-soft px-3 py-1 text-[12px] font-medium text-warn">
-            <span>Oszczędność: {formatBytes(budget.totalWastedBytes)}</span>
+            <span>Potential savings: {formatBytes(budget.totalWastedBytes)}</span>
             <span className="text-muted">·</span>
-            <span>~{budget.potentialTimeSavingsMs}ms szybciej</span>
+            <span>~{budget.potentialTimeSavingsMs}ms faster</span>
           </div>
         )}
       </div>
 
-      {/* Paski budżetów */}
+      {/* Budget Bars */}
       <div className="mt-5 space-y-4">
         {budget.budgets.map((b) => {
           const isOver = b.status === "bad";
@@ -68,7 +68,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
                 <span className="font-medium text-ink">{b.name}</span>
                 <div className="flex items-center gap-2 font-mono text-[12px]">
                   <span className="text-ink">{formatBytes(b.actualBytes)}</span>
-                  <span className="text-muted">/ limit {formatBytes(b.budgetBytes)}</span>
+                  <span className="text-muted">/ budget {formatBytes(b.budgetBytes)}</span>
                   <span
                     className={`rounded px-1.5 py-0.5 text-[10.5px] font-medium ${
                       isOver
@@ -93,26 +93,26 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
         })}
       </div>
 
-      {/* Lista nieużywanego kodu */}
+      {/* Unused Code List */}
       {budget.bloatItems.length > 0 && (
         <div className="mt-6 border-t border-line pt-5">
           <div className="flex items-center justify-between">
             <h4 className="text-[13px] font-semibold text-ink">
-              Wykryty nieużywany kod (Unused JavaScript & CSS)
+              Unused JavaScript & CSS Bloat
             </h4>
             <span className="font-mono text-[11px] text-muted">
-              {budget.bloatItems.length} plików
+              {budget.bloatItems.length} assets
             </span>
           </div>
           <div className="mt-3 overflow-x-auto">
             <table className="w-full text-left text-[12.5px]">
               <thead>
                 <tr className="border-b border-line text-[11px] uppercase tracking-wider text-muted">
-                  <th className="pb-2 font-medium">Plik / Skrypt</th>
-                  <th className="pb-2 font-medium">Typ</th>
-                  <th className="pb-2 text-right font-medium">Waga całk.</th>
-                  <th className="pb-2 text-right font-medium">Zbędne bajty</th>
-                  <th className="pb-2 text-right font-medium">% zbędny</th>
+                  <th className="pb-2 font-medium">File / Script</th>
+                  <th className="pb-2 font-medium">Type</th>
+                  <th className="pb-2 text-right font-medium">Total Size</th>
+                  <th className="pb-2 text-right font-medium">Unused Bytes</th>
+                  <th className="pb-2 text-right font-medium">% Unused</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line-2 font-mono">
@@ -153,7 +153,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
               onClick={() => setShowAllBloat(!showAllBloat)}
               className="mt-3 text-[12px] font-medium text-muted hover:text-ink transition-colors"
             >
-              {showAllBloat ? "Pokaż mniej ↑" : `Pokaż wszystkie (${budget.bloatItems.length}) ↓`}
+              {showAllBloat ? "Show less ↑" : `Show all (${budget.bloatItems.length}) ↓`}
             </button>
           )}
         </div>
@@ -163,7 +163,7 @@ export function BudgetPanel({ budget }: { budget?: PerformanceBudget }) {
 }
 
 /* ============================================================
-   2. Karta: Third-Party Scripts & Main Thread
+   2. Card: Third-Party Scripts & Main Thread
    ============================================================ */
 export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
   if (!summary || (!summary.entities.length && summary.thirdPartyBytes === 0)) return null;
@@ -177,14 +177,14 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
         <div>
           <div className="flex items-center gap-2.5">
             <h3 className="text-[17px] font-semibold tracking-[-0.01em]">
-              Wpływ Skryptów Zewnętrznych (Third-Party)
+              Third-Party Script Impact
             </h3>
             <span className="rounded-full border border-line px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
-              Tagi & Biblioteki
+              Tags & Libraries
             </span>
           </div>
           <p className="mt-1 text-[13px] text-muted">
-            Udział usług obcych w transferze oraz ich obciążenie głównego wątku przeglądarki (CPU).
+            Share of third-party assets in transfer size and main thread CPU execution time.
           </p>
         </div>
         <div className="flex items-center gap-3 font-mono text-[12px]">
@@ -199,37 +199,37 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
         </div>
       </div>
 
-      {/* Podział proporcjonalny wagi */}
+      {/* Breakdown Bar */}
       <div className="mt-5">
         <div className="flex h-3 w-full overflow-hidden rounded-full bg-line-2">
           <div
             className="h-full bg-ink transition-all duration-500"
             style={{ width: `${firstPartyPercent}%` }}
-            title={`Własne pliki: ${firstPartyPercent}% (${formatBytes(summary.firstPartyBytes)})`}
+            title={`1st-party assets: ${firstPartyPercent}% (${formatBytes(summary.firstPartyBytes)})`}
           />
           <div
             className="h-full bg-warn transition-all duration-500"
             style={{ width: `${summary.thirdPartyPercent}%` }}
-            title={`Zewnętrzne usługi: ${summary.thirdPartyPercent}% (${formatBytes(summary.thirdPartyBytes)})`}
+            title={`3rd-party services: ${summary.thirdPartyPercent}% (${formatBytes(summary.thirdPartyBytes)})`}
           />
         </div>
         <div className="mt-2 flex items-center justify-between font-mono text-[11.5px] text-muted">
-          <span>Własny kod: {formatBytes(summary.firstPartyBytes)} ({summary.firstPartyMainThreadMs}ms CPU)</span>
-          <span>Skrypty obce: {formatBytes(summary.thirdPartyBytes)} ({summary.thirdPartyMainThreadMs}ms CPU)</span>
+          <span>1st party: {formatBytes(summary.firstPartyBytes)} ({summary.firstPartyMainThreadMs}ms CPU)</span>
+          <span>3rd party: {formatBytes(summary.thirdPartyBytes)} ({summary.thirdPartyMainThreadMs}ms CPU)</span>
         </div>
       </div>
 
-      {/* Tabela wykrytych usług */}
+      {/* Detected Entities Table */}
       {summary.entities.length > 0 && (
         <div className="mt-5 overflow-x-auto">
           <table className="w-full text-left text-[12.5px]">
             <thead>
               <tr className="border-b border-line text-[11px] uppercase tracking-wider text-muted">
-                <th className="pb-2 font-medium">Usługa / Dostawca</th>
-                <th className="pb-2 font-medium">Kategoria</th>
-                <th className="pb-2 text-right font-medium">Zasoby</th>
+                <th className="pb-2 font-medium">Service / Provider</th>
+                <th className="pb-2 font-medium">Category</th>
+                <th className="pb-2 text-right font-medium">Requests</th>
                 <th className="pb-2 text-right font-medium">Transfer</th>
-                <th className="pb-2 text-right font-medium">Obciążenie CPU</th>
+                <th className="pb-2 text-right font-medium">CPU Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line-2 font-mono">
@@ -263,7 +263,7 @@ export function ThirdPartyPanel({ summary }: { summary?: ThirdPartySummary }) {
 }
 
 /* ============================================================
-   3. Karta: DOM Tree Health & Complexity
+   3. Card: DOM Tree Health & Complexity
    ============================================================ */
 export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
   if (!domHealth) return null;
@@ -277,7 +277,7 @@ export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
         <div>
           <div className="flex items-center gap-2.5">
             <h3 className="text-[17px] font-semibold tracking-[-0.01em]">
-              Złożoność i Struktura Drzewa DOM
+              DOM Tree Structure & Complexity
             </h3>
             <span
               className={`rounded-full px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider ${
@@ -288,36 +288,36 @@ export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
                   : "bg-bad-soft text-bad"
               }`}
             >
-              {isGood ? "Optymalny DOM" : isWarn ? "Umiarkowany DOM" : "Przeładowany DOM"}
+              {isGood ? "Optimal DOM" : isWarn ? "Moderate DOM" : "Excessive DOM"}
             </span>
           </div>
           <p className="mt-1 text-[13px] text-muted">
-            Wpływ liczby węzłów i głębokości zagnieżdżenia na płynność animacji i renderowanie.
+            Impact of total nodes and nesting depth on animation fluidity and render performance.
           </p>
         </div>
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3 font-mono">
         <div className="rounded-[8px] border border-line bg-bg-soft/40 p-4">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Liczba węzłów DOM</p>
+          <p className="text-[11px] uppercase tracking-wider text-muted">Total DOM Elements</p>
           <p className="mt-1 text-[22px] font-semibold text-ink">
             {domHealth.totalElements.toLocaleString()}
           </p>
-          <p className="mt-1 text-[11px] text-muted">Optymalnie: &lt; 800</p>
+          <p className="mt-1 text-[11px] text-muted">Target: &lt; 800</p>
         </div>
         <div className="rounded-[8px] border border-line bg-bg-soft/40 p-4">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Maks. głębokość</p>
+          <p className="text-[11px] uppercase tracking-wider text-muted">Max Nesting Depth</p>
           <p className="mt-1 text-[22px] font-semibold text-ink">
-            {domHealth.maxDepth} poziomów
+            {domHealth.maxDepth} levels
           </p>
-          <p className="mt-1 text-[11px] text-muted">Optymalnie: &lt; 24</p>
+          <p className="mt-1 text-[11px] text-muted">Target: &lt; 24</p>
         </div>
         <div className="rounded-[8px] border border-line bg-bg-soft/40 p-4">
-          <p className="text-[11px] uppercase tracking-wider text-muted">Maks. dzieci w węźle</p>
+          <p className="text-[11px] uppercase tracking-wider text-muted">Max Child Elements</p>
           <p className="mt-1 text-[22px] font-semibold text-ink">
             {domHealth.maxChildren}
           </p>
-          <p className="mt-1 text-[11px] text-muted">Optymalnie: &lt; 40</p>
+          <p className="mt-1 text-[11px] text-muted">Target: &lt; 40</p>
         </div>
       </div>
 
@@ -335,7 +335,7 @@ export function DomHealthPanel({ domHealth }: { domHealth?: DomHealth }) {
 }
 
 /* ============================================================
-   4. Karta: Runtime Console & Network Log
+   4. Card: Runtime Console & Network Log
    ============================================================ */
 export function ConsoleIssuesPanel({ issues }: { issues?: ConsoleIssue[] }) {
   if (!issues || issues.length === 0) return null;
@@ -346,18 +346,18 @@ export function ConsoleIssuesPanel({ issues }: { issues?: ConsoleIssue[] }) {
         <div>
           <div className="flex items-center gap-2.5">
             <h3 className="text-[17px] font-semibold tracking-[-0.01em]">
-              Dziennik Błędów Konsoli i Błędnych Zapytań
+              Console & Network Error Log
             </h3>
             <span className="rounded-full border border-line px-2 py-0.5 font-mono text-[11px] uppercase tracking-wider text-muted">
               Runtime Log
             </span>
           </div>
           <p className="mt-1 text-[13px] text-muted">
-            Problemy JavaScript rzucone w trakcie ładowania oraz zasoby z kodami odpowiedzi 4xx/5xx.
+            Runtime JavaScript errors, console warnings, and 4xx/5xx network resource failures.
           </p>
         </div>
         <span className="font-mono text-[12px] text-bad font-medium">
-          {issues.length} {issues.length === 1 ? "zdarzenie" : "zdarzeń"}
+          {issues.length} {issues.length === 1 ? "issue" : "issues"}
         </span>
       </div>
 

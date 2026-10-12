@@ -436,7 +436,7 @@ export function buildDemoReport(targetValue = "https://example.com"): AnalysisRe
       maxChildren: 28,
       status: "good",
       warnings: [
-        "Struktura DOM jest optymalna i zwięzła (540 elementów, głębokość 14). Brak ryzyka layout thrashing.",
+        "DOM structure is optimal and compact (540 elements, depth 14). Low risk of layout thrashing.",
       ],
     },
     consoleIssues: [

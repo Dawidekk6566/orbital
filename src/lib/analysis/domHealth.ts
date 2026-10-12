@@ -91,36 +91,36 @@ export function extractDomHealth(
   if (totalElements > THRESHOLDS.maxElementsWarn) {
     status = "bad";
     warnings.push(
-      `Drzewo DOM zawiera aż ${totalElements.toLocaleString()} elementów (limit: ${THRESHOLDS.maxElementsWarn}). Nadmierna liczba węzłów zwiększa zużycie pamięci i spowalnia reflows.`,
+      `DOM tree contains ${totalElements.toLocaleString()} elements (recommended limit: ${THRESHOLDS.maxElementsWarn}). Excessive nodes increase memory consumption and slow down style recalcs and reflows.`,
     );
   } else if (totalElements > THRESHOLDS.maxElementsGood) {
     if (status === "good") status = "warn";
     warnings.push(
-      `Liczba elementów DOM (${totalElements.toLocaleString()}) przekracza zalecany optymalny próg 800 węzłów. Rozważ wirtualizację długich list i leniwe ładowanie komponentów.`,
+      `DOM element count (${totalElements.toLocaleString()}) exceeds the recommended threshold of 800 nodes. Consider virtualizing long lists and lazy-loading off-screen components.`,
     );
   }
 
   if (maxDepth > THRESHOLDS.maxDepthWarn) {
     status = "bad";
     warnings.push(
-      `Maksymalna głębokość drzewa DOM wynosi ${maxDepth} poziomów (zalecane < ${THRESHOLDS.maxDepthGood}). Zbyt głębokie zagnieżdżenie utrudnia silnikowi przeglądarki wyliczanie stylów CSS.`,
+      `Maximum DOM tree depth is ${maxDepth} levels (recommended < ${THRESHOLDS.maxDepthGood}). Excessive nesting makes CSS style calculations significantly more expensive.`,
     );
   } else if (maxDepth > THRESHOLDS.maxDepthGood) {
     if (status === "good") status = "warn";
     warnings.push(
-      `Głębokość zagnieżdżenia DOM (${maxDepth} poziomów) zbliża się do granicy krytycznej. Sprawdź zbędne kontenery <div> (tzw. "div soup").`,
+      `DOM nesting depth (${maxDepth} levels) approaches critical limit. Inspect and eliminate redundant container elements ("div soup").`,
     );
   }
 
   if (maxChildren > THRESHOLDS.maxChildrenWarn) {
     if (status !== "bad") status = "warn";
     warnings.push(
-      `Wykryto węzeł z ${maxChildren} dziećmi bezpośrednimi. Duża liczba rodzeństwa może powodować opóźnienia przy manipulacji DOM w trakcie animacji.`,
+      `Detected a parent node with ${maxChildren} direct child elements. A large number of siblings can cause frame drops during layout reflows and animations.`,
     );
   }
 
   if (warnings.length === 0) {
-    warnings.push("Struktura DOM jest zwięzła i zoptymalizowana pod kątem szybkiego renderowania.");
+    warnings.push("DOM structure is compact and optimized for rapid browser rendering.");
   }
 
   return {

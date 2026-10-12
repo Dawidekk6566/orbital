@@ -14,27 +14,27 @@ interface SectionCategory {
 
 const CATEGORIES: SectionCategory[] = [
   {
-    title: "Podsumowanie & Core",
+    title: "Overview & Core",
     ids: ["overview", "vitals", "opportunities"],
   },
   {
-    title: "Wydajność & Sieć",
+    title: "Performance & Network",
     ids: ["performance", "network", "budget", "thirdparty", "dom"],
   },
   {
-    title: "Audyty Główne",
+    title: "Core Audits",
     ids: ["accessibility", "seo", "security"],
   },
   {
-    title: "Bezpieczeństwo & Domena",
+    title: "Security & Domain",
     ids: ["headers", "dns", "cve", "csp", "techstack"],
   },
   {
-    title: "SEO & Odkrywanie",
+    title: "SEO & Discovery",
     ids: ["social", "schema", "crawler"],
   },
   {
-    title: "Diagnostyka Runtime",
+    title: "Runtime Diagnostics",
     ids: ["console"],
   },
 ];
@@ -144,7 +144,7 @@ export function AuditNavTabs({
             type="button"
             onClick={() => scrollBy(-240)}
             disabled={!canScrollLeft}
-            aria-label="Przewiń zakładki w lewo"
+            aria-label="Scroll tabs left"
             className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-line bg-white text-ink shadow-sm transition-all hover:border-ink hover:bg-bg-soft active:scale-95 disabled:pointer-events-none disabled:opacity-20 dark:bg-[#16171a]"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -187,7 +187,7 @@ export function AuditNavTabs({
             type="button"
             onClick={() => scrollBy(240)}
             disabled={!canScrollRight}
-            aria-label="Przewiń zakładki w prawo"
+            aria-label="Scroll tabs right"
             className="mr-2 flex h-7 w-7 flex-none items-center justify-center rounded-full border border-line bg-white text-ink shadow-sm transition-all hover:border-ink hover:bg-bg-soft active:scale-95 disabled:pointer-events-none disabled:opacity-20 dark:bg-[#16171a]"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -202,7 +202,7 @@ export function AuditNavTabs({
             type="button"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             aria-expanded={dropdownOpen}
-            aria-label="Wszystkie sekcje audytu"
+            aria-label="All audit sections"
             className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[11.5px] font-medium transition-all ${
               dropdownOpen
                 ? "border-ink bg-ink text-white"
@@ -214,8 +214,8 @@ export function AuditNavTabs({
               <line x1="4" y1="12" x2="20" y2="12" />
               <line x1="4" y1="18" x2="20" y2="18" />
             </svg>
-            <span className="hidden sm:inline">Sekcje ({sections.length})</span>
-            <span className="sm:hidden">Wszystkie</span>
+            <span className="hidden sm:inline">Sections ({sections.length})</span>
+            <span className="sm:hidden">All</span>
             <svg
               className={`h-3 w-3 flex-none transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
               viewBox="0 0 24 24"
@@ -232,10 +232,10 @@ export function AuditNavTabs({
             <div className="absolute right-0 top-full z-50 mt-1.5 w-[320px] sm:w-[440px] rounded-[10px] border border-line bg-white p-4 shadow-xl backdrop-blur-xl dark:bg-[#16171a]">
               <div className="flex items-center justify-between border-b border-line pb-2.5">
                 <span className="font-mono text-[12px] font-semibold text-ink">
-                  Szybki skok do sekcji raportu
+                  Jump to report section
                 </span>
                 <span className="font-mono text-[11px] text-muted">
-                  {sections.length} sekcji
+                  {sections.length} sections
                 </span>
               </div>
 
@@ -280,7 +280,7 @@ export function AuditNavTabs({
                   return (
                     <div>
                       <p className="font-mono text-[10.5px] uppercase tracking-wider text-muted">
-                        Inne sekcje
+                        Other sections
                       </p>
                       <div className="mt-1.5 flex flex-wrap gap-1.5">
                         {uncategorized.map((s) => (
