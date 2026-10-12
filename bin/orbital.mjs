@@ -90,6 +90,7 @@ async function main() {
     report = await res.json();
   } catch (err) {
     console.error(`\x1b[31mFailed to connect to Orbital API at ${apiUrl}:\x1b[0m ${err.message}`);
+    console.error(`\x1b[33mHint:\x1b[0m Ensure the Orbital server is running (e.g. 'npm run dev' or 'npm start'), or specify an endpoint via --api-url <url> / ORBITAL_API_URL.`);
     process.exit(1);
   }
 

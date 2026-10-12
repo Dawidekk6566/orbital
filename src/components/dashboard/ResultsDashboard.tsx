@@ -647,10 +647,12 @@ export function ResultsDashboard({
   const [activeSec, setActiveSec] = useState(sections[0]?.id ?? "overview");
 
   const sectionsRef = useRef(sections);
-  sectionsRef.current = sections;
-
   const embeddedRef = useRef(embedded);
-  embeddedRef.current = embedded;
+
+  useEffect(() => {
+    sectionsRef.current = sections;
+    embeddedRef.current = embedded;
+  });
 
   useEffect(() => {
     const handleScroll = () => {
