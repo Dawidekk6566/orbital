@@ -14,9 +14,11 @@ import { CosmicLoader } from "@/components/hero/CosmicLoader";
 export function RunAuditButton({
   projectId,
   label = "Run audit",
+  url,
 }: {
   projectId: string;
   label?: string;
+  url?: string;
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +46,7 @@ export function RunAuditButton({
 
       {pending && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
-          <CosmicLoader target="Project Audit" />
+          <CosmicLoader target={url || "Project Audit"} />
         </div>
       )}
     </div>

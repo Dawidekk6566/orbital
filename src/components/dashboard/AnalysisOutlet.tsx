@@ -22,6 +22,7 @@ export function AnalysisOutlet() {
   const status = useAnalysisStore((s) => s.status);
   const report = useAnalysisStore((s) => s.report);
   const reset = useAnalysisStore((s) => s.reset);
+  const storeRequest = useAnalysisStore((s) => s.request);
 
   const active = status === "loading" || (status === "done" && report !== null);
 
@@ -46,7 +47,19 @@ export function AnalysisOutlet() {
           <div className="min-h-full w-full max-w-full px-2 xs:px-4 py-8 sm:px-6 sm:py-16">
             {status === "loading" && (
               <div className="flex min-h-[70vh] items-center justify-center">
-                <CosmicLoader />
+                <CosmicLoader
+                  target={
+                    storeRequest?.mode === "url"
+                      ? storeRequest.url
+                      : storeRequest?.mode === "code"
+                      ? "Pasted Code Analysis"
+                      : storeRequest?.mode === "files"
+                      ? `${storeRequest.files.length} Files Analysis`
+                      : storeRequest?.mode === "screenshot"
+                      ? "Screenshot Inspection"
+                      : "Website Audit"
+                  }
+                />
               </div>
             )}
             {status === "done" && report && (

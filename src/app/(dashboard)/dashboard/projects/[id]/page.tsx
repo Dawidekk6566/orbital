@@ -76,7 +76,7 @@ export default async function ProjectDetailPage({
               {project.latest_score ?? "—"}
             </span>
           </div>
-          <RunAuditButton projectId={project.id} />
+          <RunAuditButton projectId={project.id} url={project.url} />
         </div>
       </header>
 

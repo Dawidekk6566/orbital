@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { runCompetitorAudit } from "@/app/(dashboard)/actions/projects";
+import { CosmicLoader } from "@/components/hero/CosmicLoader";
 
 /* ============================================================
    CompetitorCompareForm — audit a competitor URL and jump to the
@@ -49,6 +50,20 @@ export function CompetitorCompareForm({ projectId }: { projectId: string }) {
         </button>
       </div>
       {error ? <p className="text-[13px] text-bad">{error}</p> : null}
+
+      {pending && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+          <CosmicLoader
+            target={
+              url.trim()
+                ? /^https?:\/\//i.test(url.trim())
+                  ? url.trim()
+                  : `https://${url.trim()}`
+                : "Competitor Benchmark"
+            }
+          />
+        </div>
+      )}
     </form>
   );
 }

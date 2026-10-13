@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { runAdHocAudit } from "@/app/(dashboard)/actions/projects";
+import { CosmicLoader } from "@/components/hero/CosmicLoader";
 
 const SAMPLES = ["stripe.com", "linear.app", "vercel.com", "github.com"];
 
@@ -118,6 +119,20 @@ export function DashboardQuickAudit() {
           </span>
         </div>
       </form>
+
+      {loading && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+          <CosmicLoader
+            target={
+              url.trim()
+                ? /^https?:\/\//i.test(url.trim())
+                  ? url.trim()
+                  : `https://${url.trim()}`
+                : "Instant Diagnostic Scan"
+            }
+          />
+        </div>
+      )}
     </div>
   );
 }

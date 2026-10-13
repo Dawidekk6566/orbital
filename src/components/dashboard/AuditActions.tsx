@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { runAudit } from "@/app/(dashboard)/actions/projects";
 import { createShareLink, revokeShareLink } from "@/app/(dashboard)/actions/share";
+import { CosmicLoader } from "@/components/hero/CosmicLoader";
 
 /* ============================================================
    AuditActions — the toolbar above an embedded report. Re-run (when
@@ -28,15 +29,20 @@ export function AuditActions({
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [isReRunning, setIsReRunning] = useState(false);
   const [shareToken, setShareToken] = useState<string | null>(initialShareToken);
   const [copied, setCopied] = useState(false);
 
   function reRun() {
     if (!projectId) return;
     setError(null);
+    setIsReRunning(true);
     startTransition(async () => {
       const result = await runAudit(projectId);
-      if (result?.error) setError(result.error);
+      if (result?.error) {
+        setError(result.error);
+        setIsReRunning(false);
+      }
     });
   }
 
@@ -134,6 +140,12 @@ export function AuditActions({
         Export JSON
       </a>
       {error ? <p className="w-full text-[13px] text-bad">{error}</p> : null}
+
+      {isReRunning && pending && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+          <CosmicLoader target="Re-running Audit" />
+        </div>
+      )}
     </div>
   );
 }
