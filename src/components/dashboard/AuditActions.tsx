@@ -4,13 +4,14 @@ import { useState, useTransition } from "react";
 import { runAudit } from "@/app/(dashboard)/actions/projects";
 import { createShareLink, revokeShareLink } from "@/app/(dashboard)/actions/share";
 import { CosmicLoaderModal } from "@/components/dashboard/CosmicLoaderModal";
+import type { AnalysisReport } from "@/lib/analysis/types";
+import { AgencyReportModal } from "@/components/dashboard/agency/AgencyReportModal";
 
 /* ============================================================
    AuditActions — the toolbar above an embedded report. Re-run (when
    the audit belongs to a project), a public copy-link share token,
-   print (the browser's "Save as PDF"), and a JSON export served by
-   /api/export/audit/[id]. Kept out of ResultsDashboard so the
-   marketing modal is untouched.
+   print / branded Agency PDF, and a JSON/MD export served by
+   /api/export/audit/[id].
    ============================================================ */
 
 const BTN =
@@ -22,16 +23,19 @@ export function AuditActions({
   auditId,
   projectId,
   shareToken: initialShareToken = null,
+  report,
 }: {
   auditId: string;
   projectId: string | null;
   shareToken?: string | null;
+  report?: AnalysisReport;
 }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [isReRunning, setIsReRunning] = useState(false);
   const [shareToken, setShareToken] = useState<string | null>(initialShareToken);
   const [copied, setCopied] = useState(false);
+  const [agencyModalOpen, setAgencyModalOpen] = useState(false);
 
   function reRun() {
     if (!projectId) return;
@@ -119,8 +123,18 @@ export function AuditActions({
           Revoke link
         </button>
       ) : null}
+      {report ? (
+        <button
+          type="button"
+          onClick={() => setAgencyModalOpen(true)}
+          className={`${BTN_OUTLINE} border-ink/40 font-medium hover:border-ink`}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-good" aria-hidden="true" />
+          <span>Agency PDF Report</span>
+        </button>
+      ) : null}
       <button type="button" onClick={() => window.print()} className={BTN_OUTLINE}>
-        Print / PDF
+        Print
       </button>
       <button type="button" onClick={copyMarkdown} className={BTN_OUTLINE}>
         {copiedMd ? "MD copied!" : "Copy MD"}
@@ -146,6 +160,15 @@ export function AuditActions({
         target="Re-running Audit"
         onCancel={() => setIsReRunning(false)}
       />
+
+      {report ? (
+        <AgencyReportModal
+          report={report}
+          auditId={auditId}
+          isOpen={agencyModalOpen}
+          onClose={() => setAgencyModalOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

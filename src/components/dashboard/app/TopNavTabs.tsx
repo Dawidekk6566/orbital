@@ -15,6 +15,7 @@ const TABS: readonly Tab[] = [
   { href: "/dashboard", label: "Overview", exact: true },
   { href: "/dashboard/projects", label: "Projects" },
   { href: "/dashboard/history", label: "History" },
+  { href: "/dashboard/agency", label: "Agency & PDF" },
   { href: "/dashboard/schedule", label: "Schedule" },
   { href: "/dashboard/alerts", label: "Alerts" },
   { href: "/dashboard/team", label: "Team" },

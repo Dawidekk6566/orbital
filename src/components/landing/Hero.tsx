@@ -341,7 +341,7 @@ export function Hero() {
                 </div>
                 <div className="overflow-x-auto rounded-[6px] border border-line bg-bg-soft/40 p-4">
                   <div className="text-muted italic mb-3">
-                    // Preload critical hero asset & specify explicit dimensions to eliminate CLS and accelerate LCP by 680ms
+                    {"// Preload critical hero asset & specify explicit dimensions to eliminate CLS and accelerate LCP by 680ms"}
                   </div>
                   <div className="flex gap-3 bg-ink/[0.03] text-gray-1 border-l-2 border-line-strong px-3 py-1.5 rounded-r">
                     <span className="select-none font-bold text-muted">-</span>

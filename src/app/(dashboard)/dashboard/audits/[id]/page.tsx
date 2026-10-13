@@ -56,6 +56,7 @@ export default async function AuditReportPage({
             auditId={audit.id}
             projectId={audit.project_id}
             shareToken={audit.share_token}
+            report={audit.report}
           />
         </div>
       </div>

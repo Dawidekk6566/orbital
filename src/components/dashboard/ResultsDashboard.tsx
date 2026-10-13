@@ -30,6 +30,9 @@ import {
   normalizeLegacyMetric,
   normalizeLegacyRecommendation,
 } from "@/lib/analysis/legacyNormalizer";
+import { AiRemediationModal } from "./ai/AiRemediationModal";
+import type { RemediationRequest } from "@/lib/analysis/remediationTypes";
+import { AgencyReportModal } from "./agency/AgencyReportModal";
 
 /* ============================================================
    Dashboard wyników — 1:1 z dashboard.html (light-monochrome),
@@ -208,10 +211,12 @@ function Opp({
   rec,
   open,
   onToggle,
+  onOpenRemediation,
 }: {
   rec: Recommendation;
   open: boolean;
   onToggle: () => void;
+  onOpenRemediation?: (req: RemediationRequest) => void;
 }) {
   const gainColor =
     rec.severity === "critical" || rec.severity === "high"
@@ -249,16 +254,39 @@ function Opp({
               <strong className="font-semibold text-ink">Fix:</strong> {rec.fix}
             </p>
             {oppDoc?.code && <CodeFix code={oppDoc.code} />}
-            {oppDoc?.docsUrl && (
-              <a
-                href={oppDoc.docsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-block font-mono text-[12.5px] text-ink underline underline-offset-4 hover:text-gray-1"
-              >
-                Learn more →
-              </a>
-            )}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              {onOpenRemediation && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onOpenRemediation({
+                      issueId: rec.id,
+                      title: rec.title,
+                      category: rec.category,
+                      severity: rec.severity,
+                      problem: rec.problem,
+                      fix: rec.fix,
+                      codeSnippet: oppDoc?.code,
+                      evidence: rec.evidence,
+                    })
+                  }
+                  className="inline-flex items-center gap-2 rounded-full bg-ink px-3.5 py-1.5 font-mono text-[12px] font-medium text-white transition-colors hover:bg-[#222]"
+                >
+                  <span>✨</span>
+                  <span>AI Remediation Studio (Diff &amp; Patch)</span>
+                </button>
+              )}
+              {oppDoc?.docsUrl && (
+                <a
+                  href={oppDoc.docsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[12.5px] text-ink underline underline-offset-4 hover:text-gray-1"
+                >
+                  Learn more →
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -321,7 +349,13 @@ function DetailBlock({ label, children }: { label: string; children: React.React
   );
 }
 
-function CheckDetail({ metric }: { metric: Metric }) {
+function CheckDetail({
+  metric,
+  onOpenRemediation,
+}: {
+  metric: Metric;
+  onOpenRemediation?: (req: RemediationRequest) => void;
+}) {
   const doc = getCheckDoc(metric.id);
   const isGood = metric.status === "good";
   const onPage = metric.evidence ?? `${metric.value}${metric.unit ? ` ${metric.unit}` : ""}`;
@@ -334,6 +368,29 @@ function CheckDetail({ metric }: { metric: Metric }) {
         {!isGood && doc?.why && <DetailBlock label="Why it matters">{doc.why}</DetailBlock>}
         {!isGood && doc?.fix && <DetailBlock label="How to fix">{doc.fix}</DetailBlock>}
         {!isGood && doc?.code && <CodeFix code={doc.code} />}
+        {!isGood && onOpenRemediation && (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={() =>
+                onOpenRemediation({
+                  issueId: metric.id,
+                  title: metric.label,
+                  category: "performance",
+                  severity: metric.status === "bad" ? "critical" : "medium",
+                  problem: doc?.why ?? metric.description ?? "Metric threshold exceeded.",
+                  fix: doc?.fix ?? "Optimize resource loading and execution.",
+                  codeSnippet: doc?.code,
+                  evidence: metric.evidence,
+                })
+              }
+              className="inline-flex items-center gap-2 rounded-full bg-ink px-3.5 py-1.5 font-mono text-[12px] font-medium text-white transition-colors hover:bg-[#222]"
+            >
+              <span>✨</span>
+              <span>AI Remediation Studio (Diff &amp; Patch)</span>
+            </button>
+          </div>
+        )}
         {!doc && metric.description && <DetailBlock label="About">{metric.description}</DetailBlock>}
         {doc?.docsUrl && (
           <a
@@ -350,7 +407,13 @@ function CheckDetail({ metric }: { metric: Metric }) {
   );
 }
 
-function MetricRow({ metric }: { metric: Metric }) {
+function MetricRow({
+  metric,
+  onOpenRemediation,
+}: {
+  metric: Metric;
+  onOpenRemediation?: (req: RemediationRequest) => void;
+}) {
   const [open, setOpen] = useState(false);
   const st = metric.status;
   const icon = st === "good" ? "✓" : st === "bad" ? "✕" : "!";
@@ -384,13 +447,19 @@ function MetricRow({ metric }: { metric: Metric }) {
         />
       </button>
       <div className={`grid transition-[grid-template-rows] duration-300 motion-reduce:transition-none ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
-        <CheckDetail metric={metric} />
+        <CheckDetail metric={metric} onOpenRemediation={onOpenRemediation} />
       </div>
     </div>
   );
 }
 
-function AuditGroup({ cat }: { cat: CategoryResult }) {
+function AuditGroup({
+  cat,
+  onOpenRemediation,
+}: {
+  cat: CategoryResult;
+  onOpenRemediation?: (req: RemediationRequest) => void;
+}) {
   const fails = cat.metrics.filter((m) => m.status !== "good");
   const passes = cat.metrics.filter((m) => m.status === "good");
   return (
@@ -406,7 +475,9 @@ function AuditGroup({ cat }: { cat: CategoryResult }) {
             below to see what you&apos;re doing right.
           </p>
         ) : (
-          fails.map((m) => <MetricRow key={m.id} metric={m} />)
+          fails.map((m) => (
+            <MetricRow key={m.id} metric={m} onOpenRemediation={onOpenRemediation} />
+          ))
         )}
       </div>
       <div>
@@ -417,7 +488,9 @@ function AuditGroup({ cat }: { cat: CategoryResult }) {
         {passes.length === 0 ? (
           <p className="py-[14px] text-[14px] leading-[1.5] text-muted">No passing checks in this category.</p>
         ) : (
-          passes.map((m) => <MetricRow key={m.id} metric={m} />)
+          passes.map((m) => (
+            <MetricRow key={m.id} metric={m} onOpenRemediation={onOpenRemediation} />
+          ))
         )}
       </div>
     </div>
@@ -602,6 +675,15 @@ export function ResultsDashboard({
   const analyze = useAnalysisStore((s) => s.analyze);
   const [openOpp, setOpenOpp] = useState<string | null>(null);
   const [device, setDevice] = useState<"mobile" | "desktop">("desktop");
+  const [remediationTarget, setRemediationTarget] = useState<RemediationRequest | null>(null);
+  const [agencyReportOpen, setAgencyReportOpen] = useState(false);
+
+  const openRemediation = (req: RemediationRequest) => {
+    setRemediationTarget({
+      ...req,
+      targetUrl: report.target.value,
+    });
+  };
 
   const embedded = !showReset;
   const rsecCls = `border-t border-line py-[clamp(40px,5vw,60px)] [&:first-of-type]:border-t-0 ${
@@ -817,6 +899,14 @@ export function ResultsDashboard({
                 Re-run
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setAgencyReportOpen(true)}
+              className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-bg-soft/70 px-3 sm:px-4 py-1 sm:py-[7px] text-[12px] sm:text-[13px] font-medium text-ink transition-colors hover:border-ink hover:bg-bg-soft"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-good" aria-hidden="true" />
+              <span>Agency Report</span>
+            </button>
             {headerActions}
           </div>
         </div>
@@ -895,7 +985,11 @@ export function ResultsDashboard({
             </div>
             <div>
               {perfAudits.map((m) => (
-                <MetricRow key={m.id} metric={m} />
+                <MetricRow
+                  key={m.id}
+                  metric={m}
+                  onOpenRemediation={openRemediation}
+                />
               ))}
             </div>
           </div>
@@ -918,6 +1012,7 @@ export function ResultsDashboard({
                   rec={rec}
                   open={openOpp === rec.id}
                   onToggle={() => setOpenOpp((cur) => (cur === rec.id ? null : rec.id))}
+                  onOpenRemediation={openRemediation}
                 />
               ))}
             </div>
@@ -934,7 +1029,7 @@ export function ResultsDashboard({
                 <h2 className={RSEC_H2}>{CATEGORY_LABEL[k]}</h2>
                 <span className={RSEC_NOTE}>{c.metrics.length} audits checked.</span>
               </div>
-              <AuditGroup cat={c} />
+              <AuditGroup cat={c} onOpenRemediation={openRemediation} />
             </div>
           </section>
         );
@@ -1085,6 +1180,19 @@ export function ResultsDashboard({
           </div>
         </section>
       )}
+
+      <AiRemediationModal
+        request={remediationTarget}
+        isOpen={!!remediationTarget}
+        onClose={() => setRemediationTarget(null)}
+      />
+
+      <AgencyReportModal
+        report={report}
+        auditId={report.target?.value ? encodeURIComponent(report.target.value).slice(0, 16) : "orbital-audit"}
+        isOpen={agencyReportOpen}
+        onClose={() => setAgencyReportOpen(false)}
+      />
     </div>
   );
 }

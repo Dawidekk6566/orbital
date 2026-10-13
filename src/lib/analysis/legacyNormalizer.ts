@@ -68,7 +68,7 @@ const TITLE_MAP: Record<string, string> = {
 };
 
 export function normalizeLegacyMetric(m: Metric): Metric {
-  let label = LABEL_MAP[m.label] ?? m.label;
+  const label = LABEL_MAP[m.label] ?? m.label;
   let description = m.description;
   let value = m.value;
 
@@ -98,7 +98,7 @@ export function normalizeLegacyMetric(m: Metric): Metric {
 }
 
 export function normalizeLegacyRecommendation(r: Recommendation): Recommendation {
-  let title = TITLE_MAP[r.title] ?? r.title;
+  const title = TITLE_MAP[r.title] ?? r.title;
   let problem = r.problem;
   let fix = r.fix;
 
