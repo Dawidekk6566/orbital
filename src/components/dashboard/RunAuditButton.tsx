@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { runAudit } from "@/app/(dashboard)/actions/projects";
-import { CosmicLoader } from "@/components/hero/CosmicLoader";
+import { CosmicLoaderModal } from "@/components/dashboard/CosmicLoaderModal";
 
 /* ============================================================
    RunAuditButton — triggers a fresh audit for a project. Calls the
@@ -44,11 +44,10 @@ export function RunAuditButton({
       </button>
       {error ? <p className="text-[13px] text-bad">{error}</p> : null}
 
-      {pending && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
-          <CosmicLoader target={url || "Project Audit"} />
-        </div>
-      )}
+      <CosmicLoaderModal
+        active={pending}
+        target={url || "Project Audit"}
+      />
     </div>
   );
 }

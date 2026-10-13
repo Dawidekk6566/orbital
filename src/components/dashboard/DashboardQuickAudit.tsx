@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { runAdHocAudit } from "@/app/(dashboard)/actions/projects";
-import { CosmicLoader } from "@/components/hero/CosmicLoader";
+import { CosmicLoaderModal } from "@/components/dashboard/CosmicLoaderModal";
 
 const SAMPLES = ["stripe.com", "linear.app", "vercel.com", "github.com"];
 
 export function DashboardQuickAudit() {
   const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const [isAuditing, setIsAuditing] = useState(false);
+  const [activeTarget, setActiveTarget] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  async function handleAudit(targetUrl: string) {
+  const loading = pending || isAuditing;
+
+  function handleAudit(targetUrl: string) {
     const trimmed = targetUrl.trim();
     if (!trimmed) {
       setError("Enter a website URL to audit.");
@@ -19,23 +23,26 @@ export function DashboardQuickAudit() {
     }
     const fullUrl = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
     setError(null);
-    setLoading(true);
+    setActiveTarget(fullUrl);
+    setIsAuditing(true);
 
-    try {
-      const res = await runAdHocAudit({ mode: "url", url: fullUrl });
-      if (res && res.error) {
-        setError(res.error);
-        setLoading(false);
+    startTransition(async () => {
+      try {
+        const res = await runAdHocAudit({ mode: "url", url: fullUrl });
+        if (res && res.error) {
+          setError(res.error);
+          setIsAuditing(false);
+        }
+      } catch (err: unknown) {
+        // In Next.js, redirect() throws an internal object containing digest;
+        // keep isAuditing=true so the CosmicLoader stays visible until navigation completes.
+        if (err && typeof err === "object" && "digest" in err) {
+          return;
+        }
+        setError("Unable to complete audit. Check the URL and try again.");
+        setIsAuditing(false);
       }
-    } catch (err: unknown) {
-      // In Next.js, redirect() throws an internal object containing digest;
-      // re-throw it so Next.js navigates smoothly to the new audit.
-      if (err && typeof err === "object" && "digest" in err) {
-        throw err;
-      }
-      setError("Unable to complete audit. Check the URL and try again.");
-      setLoading(false);
-    }
+    });
   }
 
   function onSubmit(e: React.FormEvent) {
@@ -120,19 +127,11 @@ export function DashboardQuickAudit() {
         </div>
       </form>
 
-      {loading && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
-          <CosmicLoader
-            target={
-              url.trim()
-                ? /^https?:\/\//i.test(url.trim())
-                  ? url.trim()
-                  : `https://${url.trim()}`
-                : "Instant Diagnostic Scan"
-            }
-          />
-        </div>
-      )}
+      <CosmicLoaderModal
+        active={loading}
+        target={activeTarget || (url.trim() ? `https://${url.trim()}` : "Instant Diagnostic Scan")}
+        onCancel={() => setIsAuditing(false)}
+      />
     </div>
   );
 }

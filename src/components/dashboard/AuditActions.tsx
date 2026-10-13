@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { runAudit } from "@/app/(dashboard)/actions/projects";
 import { createShareLink, revokeShareLink } from "@/app/(dashboard)/actions/share";
-import { CosmicLoader } from "@/components/hero/CosmicLoader";
+import { CosmicLoaderModal } from "@/components/dashboard/CosmicLoaderModal";
 
 /* ============================================================
    AuditActions — the toolbar above an embedded report. Re-run (when
@@ -141,11 +141,11 @@ export function AuditActions({
       </a>
       {error ? <p className="w-full text-[13px] text-bad">{error}</p> : null}
 
-      {isReRunning && pending && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
-          <CosmicLoader target="Re-running Audit" />
-        </div>
-      )}
+      <CosmicLoaderModal
+        active={isReRunning && pending}
+        target="Re-running Audit"
+        onCancel={() => setIsReRunning(false)}
+      />
     </div>
   );
 }

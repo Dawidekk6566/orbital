@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import type { AnalyzeRequest } from "@/lib/analysis/types";
-import { CosmicLoader } from "@/components/hero/CosmicLoader";
+import { CosmicLoaderModal } from "@/components/dashboard/CosmicLoaderModal";
 
 /* ============================================================
    AuditInput — the multi-mode audit entry form (URL · Code · Files ·
@@ -269,21 +269,18 @@ export function AuditInput({ action }: { action: ActionFn }) {
         </div>
       </div>
 
-      {pending && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
-          <CosmicLoader
-            target={
-              mode === "url"
-                ? url.trim()
-                : mode === "code"
-                ? "Pasted Code Analysis"
-                : mode === "files"
-                ? `${files.length} Files Analysis`
-                : "Screenshot Inspection"
-            }
-          />
-        </div>
-      )}
+      <CosmicLoaderModal
+        active={pending}
+        target={
+          mode === "url"
+            ? url.trim()
+            : mode === "code"
+            ? "Pasted Code Analysis"
+            : mode === "files"
+            ? `${files.length} Files Analysis`
+            : "Screenshot Inspection"
+        }
+      />
     </div>
   );
 }
