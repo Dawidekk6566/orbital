@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="100%" height="100%" fill="none">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0c" />
+      <stop offset="50%" stop-color="#111115" />
+      <stop offset="100%" stop-color="#070709" />
+    </linearGradient>
+
+    <linearGradient id="accent-green" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+
+    <linearGradient id="glow-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#10b981" stop-opacity="0" />
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <style>
+      @keyframes pulseBeam {
+        0%, 100% { opacity: 0.3; transform: translateY(0); }
+        50% { opacity: 0.8; transform: translateY(180px); }
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      @keyframes radarSweep {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      @keyframes scorePulse {
+        0%, 100% { filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4)); }
+        50% { filter: drop-shadow(0 0 16px rgba(52, 211, 153, 0.7)); }
+      }
+      @keyframes fillProgress {
+        0% { stroke-dashoffset: 440; }
+        40%, 100% { stroke-dashoffset: 22; }
+      }
+      .cursor { animation: blink 0.9s infinite; }
+      .score-circle {
+        stroke-dasharray: 440;
+        animation: fillProgress 6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+      }
+      .pulse-glow { animation: scorePulse 3s ease-in-out infinite; }
+      .radar-line {
+        transform-origin: 755px 125px;
+        animation: radarSweep 4s linear infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- Container Box -->
+  <rect x="1" y="1" width="918" height="478" rx="14" fill="url(#bg-grad)" stroke="#27272a" stroke-width="1.5" />
+
+  <!-- Window Header Bar -->
+  <path d="M 1 15 C 1 7.268 7.268 1 15 1 L 905 1 C 912.732 1 919 7.268 919 15 L 919 44 L 1 44 Z" fill="#141418" />
+  <line x1="1" y1="44" x2="919" y2="44" stroke="#27272a" stroke-width="1" />
+
+  <!-- Window Controls -->
+  <circle cx="22" cy="22" r="5.5" fill="#ef4444" />
+  <circle cx="40" cy="22" r="5.5" fill="#eab308" />
+  <circle cx="58" cy="22" r="5.5" fill="#22c55e" />
+
+  <!-- Window Title & Badges -->
+  <text x="460" y="27" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="500" text-anchor="middle">
+    orbital-telemetry · live audit runner · v2.4
+  </text>
+  <rect x="760" y="13" width="138" height="20" rx="10" fill="#18181b" stroke="#3f3f46" stroke-width="1" />
+  <circle cx="774" cy="23" r="3.5" fill="#10b981" />
+  <text x="785" y="27" fill="#34d399" font-family="'JetBrains Mono', monospace, sans-serif" font-size="10" font-weight="600">ENGINE ONLINE</text>
+
+  <!-- Grid Partition Line -->
+  <line x1="490" y1="45" x2="490" y2="478" stroke="#222226" stroke-width="1" />
+
+  <!-- ================= LEFT: TELEMETRY STREAM ================= -->
+  <g transform="translate(30, 75)">
+    <!-- Terminal Header -->
+    <text x="0" y="0" fill="#71717a" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5">
+      // PIPELINE EXECUTION
+    </text>
+
+    <!-- CLI Command -->
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="430" height="34" rx="6" fill="#18181d" stroke="#2e2e36" stroke-width="1" />
+      <text x="14" y="22" fill="#10b981" font-family="'JetBrains Mono', monospace" font-size="13" font-weight="700">$</text>
+      <text x="32" y="22" fill="#f4f4f5" font-family="'JetBrains Mono', monospace" font-size="13">orbital audit https://useorbital.com</text>
+      <rect x="368" y="10" width="7" height="15" fill="#34d399" class="cursor" />
+    </g>
+
+    <!-- Log Items -->
+    <g transform="translate(0, 85)" font-family="'JetBrains Mono', monospace" font-size="11.5">
+      <text x="0" y="18" fill="#10b981">✓</text>
+      <text x="18" y="18" fill="#a1a1aa">[0.02s] DNS resolution: 4x A records in 12ms</text>
+
+      <text x="0" y="44" fill="#10b981">✓</text>
+      <text x="18" y="44" fill="#a1a1aa">[0.14s] TLS handshake: TLS 1.3 / ECDHE · Valid 312d</text>
+
+      <text x="0" y="70" fill="#10b981">✓</text>
+      <text x="18" y="70" fill="#a1a1aa">[0.38s] Security headers: HSTS, CSP, X-Frame verified</text>
+
+      <text x="0" y="96" fill="#10b981">✓</text>
+      <text x="18" y="96" fill="#a1a1aa">[0.82s] CrUX Real User Metrics (75th percentile):</text>
+      <text x="38" y="118" fill="#e4e4e7">LCP: 1.1s (Good) · INP: 42ms (Good) · CLS: 0.00</text>
+
+      <text x="0" y="148" fill="#10b981">✓</text>
+      <text x="18" y="148" fill="#a1a1aa">[1.15s] Lighthouse 12 Engine · Mobile viewport audit</text>
+
+      <text x="0" y="174" fill="#34d399" font-weight="700">★</text>
+      <text x="18" y="174" fill="#34d399" font-weight="700">[1.42s] Audit complete · 46 checks passed · 0 regressions</text>
+    </g>
+
+    <!-- Mini Code Diff Card -->
+    <g transform="translate(0, 290)">
+      <rect x="0" y="0" width="430" height="78" rx="8" fill="#141419" stroke="#27272e" stroke-width="1" />
+      <text x="14" y="20" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="11" font-weight="600">
+        INSTANT FIX SNIPPET · <tspan fill="#34d399">+12 pts potential</tspan>
+      </text>
+      <text x="14" y="42" fill="#f87171" font-family="'JetBrains Mono', monospace" font-size="11">- &lt;img src="/hero.png" width="1200" height="600" /&gt;</text>
+      <text x="14" y="62" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="11">+ &lt;Image src="/hero.png" width={1200} height={600} priority /&gt;</text>
+    </g>
+  </g>
+
+  <!-- ================= RIGHT: MASTER METRICS HUD ================= -->
+  <g transform="translate(520, 75)">
+    <!-- HUD Header -->
+    <text x="0" y="0" fill="#71717a" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="600" letter-spacing="1.5">
+      // OVERALL HEALTH SCORE
+    </text>
+
+    <!-- Central Gauge & Card -->
+    <g transform="translate(0, 20)">
+      <rect x="0" y="0" width="370" height="170" rx="10" fill="#141418" stroke="#27272a" stroke-width="1" />
+      
+      <!-- Score Circular Ring -->
+      <g transform="translate(85, 85)">
+        <circle cx="0" cy="0" r="62" stroke="#27272a" stroke-width="10" fill="none" />
+        <circle cx="0" cy="0" r="62" stroke="url(#accent-green)" stroke-width="10" stroke-linecap="round" fill="none" class="score-circle pulse-glow" transform="rotate(-90)" />
+        <text x="0" y="10" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="38" font-weight="800" text-anchor="middle">98</text>
+        <text x="0" y="28" fill="#71717a" font-family="'JetBrains Mono', monospace" font-size="11" font-weight="500" text-anchor="middle">/ 100</text>
+      </g>
+
+      <!-- Score Stat Details -->
+      <g transform="translate(180, 42)">
+        <text x="0" y="0" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700">OPTIMAL HEALTH</text>
+        <text x="0" y="18" fill="#a1a1aa" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">Top 1.4% of inspected web</text>
+        
+        <rect x="0" y="32" width="168" height="24" rx="12" fill="#064e3b" stroke="#059669" stroke-width="1" />
+        <circle cx="12" cy="44" r="3.5" fill="#34d399" />
+        <text x="24" y="48" fill="#ecfdf5" font-family="'JetBrains Mono', monospace" font-size="10.5" font-weight="700">READY FOR PRODUCTION</text>
+
+        <text x="0" y="78" fill="#71717a" font-family="'JetBrains Mono', monospace" font-size="10.5">LATENCY: <tspan fill="#e4e4e7">142ms</tspan> · REGION: <tspan fill="#e4e4e7">iad1</tspan></text>
+      </g>
+    </g>
+
+    <!-- 4 Sub-Category Progress Bars -->
+    <g transform="translate(0, 205)">
+      <rect x="0" y="0" width="370" height="162" rx="10" fill="#141418" stroke="#27272a" stroke-width="1" />
+      
+      <!-- Performance -->
+      <g transform="translate(18, 26)">
+        <text x="0" y="0" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600">Performance</text>
+        <text x="334" y="0" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="end">98</text>
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#27272a" />
+        <rect x="0" y="8" width="327" height="6" rx="3" fill="#10b981" />
+      </g>
+
+      <!-- Security -->
+      <g transform="translate(18, 62)">
+        <text x="0" y="0" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600">Security &amp; TLS</text>
+        <text x="334" y="0" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="end">100</text>
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#27272a" />
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#10b981" />
+      </g>
+
+      <!-- SEO -->
+      <g transform="translate(18, 98)">
+        <text x="0" y="0" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600">Search Engine Optimization</text>
+        <text x="334" y="0" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="end">100</text>
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#27272a" />
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#10b981" />
+      </g>
+
+      <!-- Accessibility -->
+      <g transform="translate(18, 134)">
+        <text x="0" y="0" fill="#e4e4e7" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12" font-weight="600">Accessibility (WCAG 2.1)</text>
+        <text x="334" y="0" fill="#34d399" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="700" text-anchor="end">96</text>
+        <rect x="0" y="8" width="334" height="6" rx="3" fill="#27272a" />
+        <rect x="0" y="8" width="320" height="6" rx="3" fill="#10b981" />
+      </g>
+    </g>
+  </g>
+</svg>
