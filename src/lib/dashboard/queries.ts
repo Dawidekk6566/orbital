@@ -142,6 +142,22 @@ export async function listAuditsForProject(
   return data as AuditListRow[];
 }
 
+/** Recent audits for the current team across all projects, newest first. */
+export async function listRecentAudits(limit = 6): Promise<AuditListRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const team = await getCurrentTeam();
+  if (!team) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("audits")
+    .select(AUDIT_LIST_COLS)
+    .eq("team_id", team.id)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  return data as AuditListRow[];
+}
+
 /** Audits run by the current team in the current calendar month. */
 export async function getAuditsThisMonth(): Promise<number> {
   const team = await getCurrentTeam();

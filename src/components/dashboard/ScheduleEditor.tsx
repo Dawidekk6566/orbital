@@ -101,7 +101,7 @@ export function ScheduleEditor({
             value={cadence}
             onChange={(e) => setCadence(e.target.value as Cadence)}
             disabled={!enabled || pending}
-            className="w-full rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink disabled:opacity-60"
+            className="w-full cursor-pointer rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {options.map((c) => (
               <option key={c} value={c}>
@@ -124,7 +124,7 @@ export function ScheduleEditor({
             value={strategy}
             onChange={(e) => setStrategy(e.target.value as "mobile" | "desktop")}
             disabled={!enabled || pending}
-            className="w-full rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink disabled:opacity-60"
+            className="w-full cursor-pointer rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <option value="mobile">Mobile</option>
             <option value="desktop">Desktop</option>

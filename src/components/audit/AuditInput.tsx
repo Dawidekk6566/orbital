@@ -179,7 +179,7 @@ export function AuditInput({ action }: { action: ActionFn }) {
                 value={language}
                 onChange={(e) => setLanguage(e.target.value as typeof language)}
                 aria-label="Language"
-                className="rounded-full border border-line px-3 py-1 text-[12px] text-ink outline-none focus:border-ink"
+                className="cursor-pointer rounded-full border border-line px-3 py-1 text-[12px] text-ink outline-none focus:border-ink focus:outline-none focus:ring-0"
               >
                 <option value="auto">Auto-detect</option>
                 <option value="html">HTML</option>

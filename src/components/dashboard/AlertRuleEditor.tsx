@@ -110,7 +110,7 @@ export function AlertRuleEditor({
             value={trigger}
             onChange={(e) => setTrigger(e.target.value as TriggerType)}
             disabled={pending}
-            className="w-full rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink disabled:opacity-60"
+            className="w-full cursor-pointer rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {(Object.keys(TRIGGER_LABEL) as TriggerType[]).map((t) => (
               <option key={t} value={t}>
@@ -153,7 +153,7 @@ export function AlertRuleEditor({
                     })
                   }
                   disabled={pending}
-                  className="flex-none rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink disabled:opacity-60"
+                  className="flex-none cursor-pointer rounded-[8px] border border-line bg-white px-3 py-2 text-[14px] outline-none focus:border-ink focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {(Object.keys(CHANNEL_LABEL) as ChannelType[]).map((t) => (
                     <option key={t} value={t}>

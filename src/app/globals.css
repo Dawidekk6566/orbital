@@ -197,88 +197,91 @@ html.dark .hover\:bg-\[\#222\]:hover {
 /* ============================================================
    SELECT / dropdown — jeden monochromatyczny styl dla wszystkich
    <select> w aplikacji (AuditInput, ScheduleEditor, AlertRuleEditor,
-   MemberList, InviteMemberForm). Element <select> ma już utility
-   Tailwind (border-line / rounded / focus:border-ink); tutaj tylko
-   to, czego utility nie wyrażają: własny chevron zamiast natywnego
-   oraz — tam gdzie przeglądarka wspiera `appearance: base-select`
-   (Chromium) — pełne ostylowanie rozwijanej listy (koniec z
-   systemowym niebieskim podświetleniem). Reszta silników dostaje
-   czysty, zamknięty kontrolek z naszym chevronem (progressive
-   enhancement). Kolory z tokenów @theme. */
+   MemberList, InviteMemberForm).
+   - Własny chevron SVG po prawej stronie, odsunięty o 12px od prawej
+     krawędzi (dokładnie symetrycznie jak tekst odsunięty o px-3 = 12px
+     od lewej krawędzi).
+   - Całkowicie wyłączony natywny outline i focus ring po kliknięciu
+     lub wyborze dowolnej opcji.
+   - Płynna zmiana odcienia chevronu na ink przy stanie focus/active.
+   - Usunięty problematyczny experimental `appearance: base-select`,
+     który powodował w Chromium wyświetlanie inline'owego trójkąta tuż
+     obok tekstu oraz systemowe outline'y.
+   ============================================================ */
 select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23444444'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%2371717a'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 14px;
-}
-/* [class] podnosi swoistość ponad utility Tailwind (px-3 itp.),
-   żeby zarezerwować miejsce na chevron bez dotykania każdego pliku. */
-select[class] {
-  padding-right: 2.25rem;
-}
-/* Focus: chevron ciemnieje do --color-ink (obramowanie robi focus:border-ink). */
-select:focus {
-  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%230a0a0a'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-size: 14px 14px;
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent !important;
 }
 
-/* Rozwijana lista — tylko przeglądarki z nowym modelem <select>.
-   Tam chevron rysuje ::picker-icon, więc gasimy nasz obrazek tła. */
-@supports (appearance: base-select) {
-  select,
-  ::picker(select) {
-    appearance: base-select;
-  }
-  select {
-    background-image: none;
-  }
-  select:focus {
-    background-image: none;
-  }
-  ::picker(select) {
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius);
-    background: var(--color-white);
-    padding: 4px;
-    margin-top: 4px;
-    box-shadow: 0 6px 20px rgba(10, 10, 10, 0.07);
-    font-family: var(--font-sans);
-  }
-  select option {
-    display: flex;
-    align-items: center;
-    padding: 8px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    color: var(--color-ink);
-  }
-  /* Kursor / klawiatura → dyskretne wypełnienie zamiast systemowego niebieskiego. */
-  select option:hover,
-  select option:focus {
-    background: var(--color-bg-soft);
-  }
-  /* Aktualnie wybrana opcja — pełny inkowy pasek, spójny z ::selection. */
-  select option:checked {
-    background: var(--color-ink);
-    color: var(--color-void);
-  }
-  /* Domyślny „✓" zbędny — zaznaczenie niesie pasek tła. */
-  select option::checkmark {
-    content: none;
-  }
-  select::picker-icon {
-    color: var(--color-gray-1);
-    transition: transform 0.18s ease;
-  }
-  select:open::picker-icon {
-    transform: rotate(180deg);
-  }
+/* [class] podnosi swoistość ponad utility Tailwind (px-3 itp.),
+   żeby zarezerwować 36px na chevron z prawej strony i tekst na niego nie nachodził. */
+select[class] {
+  padding-right: 36px !important;
 }
-@media (prefers-reduced-motion: reduce) {
-  select::picker-icon {
-    transition: none;
-  }
+
+/* Dark mode: dopasowany chevron */
+html.dark select {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23a1a1aa'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+}
+
+/* Focus, Focus-Visible, Active: absolutny brak outline'u, chevron ciemnieje do ink */
+select:focus,
+select:focus-visible,
+select:active,
+select:focus-within {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%230a0a0a'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+}
+
+html.dark select:focus,
+html.dark select:focus-visible,
+html.dark select:active,
+html.dark select:focus-within {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23f3f3f4'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='m6%209%206%206%206-6'/%3E%3C/svg%3E");
+}
+
+/* Usunięcie obramowania w Firefox */
+select::-moz-focus-inner {
+  border: 0 !important;
+}
+
+/* Ukrycie ewentualnych wbudowanych picker-icon w nowym Chromium */
+select::picker-icon {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Usunięcie outline z opcji i listy rozwijanej */
+select option,
+select option:focus,
+select option:focus-visible,
+select option:checked,
+select option:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: var(--color-white);
+  color: var(--color-ink);
+}
+
+::picker(select) {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Keyframe dla utili animate-[spin_…] (spinnery w AuditForm / LiveDemo) */

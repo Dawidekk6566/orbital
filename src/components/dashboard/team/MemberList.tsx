@@ -139,7 +139,7 @@ function MemberRow({
             onChange={(e) => onRoleChange(e.target.value as TeamRole)}
             disabled={pending}
             aria-label="Role"
-            className="rounded-[8px] border border-line bg-white px-2.5 py-1.5 text-[13px] outline-none focus:border-ink disabled:opacity-60"
+            className="cursor-pointer rounded-[8px] border border-line bg-white px-2.5 py-1.5 text-[13px] outline-none focus:border-ink focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {roleOptions.map((r) => (
               <option key={r} value={r}>

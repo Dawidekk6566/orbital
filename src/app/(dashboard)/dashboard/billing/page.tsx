@@ -16,12 +16,8 @@ export const metadata: Metadata = {
 };
 
 /* ============================================================
-   Billing (/dashboard/billing) — shows the three plans with the
-   team's current plan marked, and owner/admin controls to upgrade
-   (Stripe Checkout) or manage the subscription (Stripe portal).
-   teams.plan is the source of truth (written only by the webhook);
-   this page just reflects it. Everything degrades gracefully when
-   Stripe isn't configured.
+   Billing (/dashboard/billing) — Subscription management & tiers.
+   Inspect active plan, monthly quotas, invoices and upgrades.
    ============================================================ */
 
 type BillingPlan = PlanCardData & { id: PlanId };
@@ -42,7 +38,7 @@ const PLANS: BillingPlan[] = [
     name: "Free",
     price: "$0",
     cadence: "/ forever",
-    tagline: "Everything you need to audit a single site.",
+    tagline: "Essential diagnostics for single projects.",
     features: build(["25", "1", null, "7 days", "1", null, null]),
   },
   {
@@ -51,7 +47,7 @@ const PLANS: BillingPlan[] = [
     price: "$29",
     cadence: "/ month",
     popular: true,
-    tagline: "Automation, history and API for growing teams.",
+    tagline: "Automation, 1-year history and API for growing teams.",
     features: build(["2,000", "25", "Daily", "1 year", "3", "Yes", "Yes"]),
   },
   {
@@ -59,7 +55,7 @@ const PLANS: BillingPlan[] = [
     name: "Team",
     price: "$99",
     cadence: "/ month",
-    tagline: "Unlimited scale with SSO and priority support.",
+    tagline: "Unlimited scale with hourly schedules & priority support.",
     features: build([
       "Unlimited",
       "Unlimited",
@@ -87,12 +83,14 @@ export default async function BillingPage({
 
   if (!team) {
     return (
-      <div>
-        <h1 className="text-[clamp(22px,3vw,30px)] font-semibold tracking-[-0.025em]">
-          Billing
-        </h1>
-        <p className="mt-8 rounded-[10px] border border-dashed border-line bg-bg-soft p-12 text-center text-[14px] text-gray-1">
-          No active team. Sign in to manage billing.
+      <div className="flex flex-col gap-8">
+        <header className="border-b border-line pb-6">
+          <h1 className="text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.025em] text-ink">
+            Billing
+          </h1>
+        </header>
+        <p className="rounded-[10px] border border-dashed border-line bg-bg-soft/60 p-12 text-center text-[14px] text-gray-1 font-mono">
+          No active team found. Sign in to manage billing.
         </p>
       </div>
     );
@@ -105,49 +103,120 @@ export default async function BillingPage({
   const hasCustomer = subscription !== null;
 
   return (
-    <div>
-      <header className="flex flex-wrap items-start justify-between gap-4">
+    <div className="flex flex-col gap-8">
+      {/* 1. Header with Telemetry Status */}
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
         <div>
-          <h1 className="text-[clamp(22px,3vw,30px)] font-semibold tracking-[-0.025em]">
-            Billing
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-ink" aria-hidden="true" />
+            <span className="font-mono text-[12px] uppercase tracking-wider text-muted">
+              Subscription Management / Stripe Portal
+            </span>
+          </div>
+          <h1 className="mt-1 text-[clamp(24px,3vw,32px)] font-semibold tracking-[-0.025em] text-ink">
+            Billing &amp; Plans
           </h1>
-          <p className="mt-1 text-[13px] text-gray-1">
-            You&rsquo;re on the{" "}
-            <span className="font-medium text-ink">{PLAN_LABELS[current]}</span>{" "}
-            plan.
-            {subscription?.cancel_at_period_end
-              ? " Cancels at the end of the current period."
-              : null}
+          <p className="mt-1 text-[14.5px] text-gray-1">
+            Current subscription details, monthly audit allowances, and organization tier upgrades.
           </p>
         </div>
-        {canManage && hasCustomer ? <ManageBillingButton /> : null}
-      </header>
+
+        {canManage && hasCustomer ? (
+          <ManageBillingButton />
+        ) : (
+          <div className="flex items-center gap-2 rounded-full border border-line bg-bg-soft px-3 py-1 font-mono text-[11.5px] text-gray-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-good" />
+            <span>Active Tier: {PLAN_LABELS[current]}</span>
+            <span className="text-line-strong">·</span>
+            <span className="text-muted">Invoices synced</span>
+          </div>
+        )}
+      </div>
+
+      {/* 2. High-Density Telemetry Metric Cards */}
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
+        <div className="rounded-[8px] border border-line bg-white/95 p-4.5 dark:bg-white/5">
+          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.06em] text-muted">
+            <span>Current Tier</span>
+            <span className="rounded border border-line px-1.5 py-0.5 text-[10px] text-gray-1">
+              Active
+            </span>
+          </div>
+          <p className="mt-2.5 font-mono text-[22px] font-semibold text-ink">
+            {PLAN_LABELS[current]}
+          </p>
+          <div className="mt-2 text-[12px] text-muted font-mono">
+            <span>
+              {subscription?.cancel_at_period_end
+                ? "Cancels at end of cycle"
+                : "Renews automatically"}
+            </span>
+          </div>
+        </div>
+
+        <div className="rounded-[8px] border border-line bg-white/95 p-4.5 dark:bg-white/5">
+          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.06em] text-muted">
+            <span>Audit Capacity</span>
+            <span className="font-mono text-[10.5px] text-gray-1">Monthly</span>
+          </div>
+          <p className="mt-2.5 font-mono text-[22px] font-semibold text-ink">
+            {current === "free" ? "25" : current === "pro" ? "2,000" : "Unlimited"}
+          </p>
+          <div className="mt-2 text-[12px] text-muted font-mono">
+            <span>Dual-engine executions</span>
+          </div>
+        </div>
+
+        <div className="rounded-[8px] border border-line bg-white/95 p-4.5 dark:bg-white/5">
+          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.06em] text-muted">
+            <span>Monitored Domains</span>
+            <span className="font-mono text-[10.5px] text-gray-1">Endpoints</span>
+          </div>
+          <p className="mt-2.5 font-mono text-[22px] font-semibold text-ink">
+            {current === "free" ? "1 site" : current === "pro" ? "25 sites" : "Unlimited"}
+          </p>
+          <div className="mt-2 text-[12px] text-muted font-mono">
+            <span>Project history tracking</span>
+          </div>
+        </div>
+
+        <div className="rounded-[8px] border border-line bg-white/95 p-4.5 dark:bg-white/5">
+          <div className="flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.06em] text-muted">
+            <span>API &amp; CI/CD</span>
+            <span className="font-mono text-[10.5px] text-gray-1">Tokens</span>
+          </div>
+          <p className="mt-2.5 font-mono text-[22px] font-semibold text-ink">
+            {current === "free" ? "Locked" : "Unlocked"}
+          </p>
+          <div className="mt-2 text-[12px] text-muted font-mono">
+            <span>{current === "free" ? "Pro required" : "REST + CLI active"}</span>
+          </div>
+        </div>
+      </div>
 
       {checkout === "success" ? (
-        <p className="mt-6 rounded-[10px] border border-line bg-bg-soft px-4 py-3 text-[13px] text-ink">
-          Checkout complete. Your plan updates within a few seconds once Stripe
-          confirms the payment.
-        </p>
+        <div className="rounded-[8px] border border-line bg-bg-soft px-4 py-3 font-mono text-[13px] text-ink">
+          Payment confirmed. Plan privileges are updated automatically.
+        </div>
       ) : null}
       {checkout === "cancelled" ? (
-        <p className="mt-6 rounded-[10px] border border-line bg-bg-soft px-4 py-3 text-[13px] text-gray-1">
-          Checkout cancelled — no changes were made.
-        </p>
+        <div className="rounded-[8px] border border-line bg-bg-soft px-4 py-3 font-mono text-[13px] text-gray-1">
+          Checkout was cancelled — your current subscription remains untouched.
+        </div>
       ) : null}
 
       {!configured ? (
-        <p className="mt-6 rounded-[10px] border border-dashed border-line bg-bg-soft px-4 py-3 text-[13px] text-gray-1">
-          Billing isn&rsquo;t configured in this environment. Plans are shown for
-          reference; upgrades are disabled until Stripe keys are added.
-        </p>
+        <div className="rounded-[8px] border border-dashed border-line bg-bg-soft px-4 py-3 font-mono text-[12.5px] text-muted">
+          Stripe billing is not configured in this local environment. Plans are displayed for reference.
+        </div>
       ) : !canManage ? (
-        <p className="mt-6 rounded-[10px] border border-dashed border-line bg-bg-soft px-4 py-3 text-[13px] text-gray-1">
-          Only an owner or admin can change the plan. Ask a team manager to
-          upgrade.
-        </p>
+        <div className="rounded-[8px] border border-dashed border-line bg-bg-soft px-4 py-3 font-mono text-[12.5px] text-muted">
+          Only team owners or admins have authority to upgrade subscription plans.
+        </div>
       ) : null}
 
-      <div className="mt-8 grid grid-cols-3 gap-[clamp(14px,1.5vw,22px)] max-[920px]:grid-cols-1 max-[920px]:gap-4">
+      {/* 3. Plans Grid */}
+      <div className="grid grid-cols-3 gap-5 max-[920px]:grid-cols-1">
         {PLANS.map((plan, i) => (
           <PlanCard
             key={plan.id}
@@ -160,18 +229,12 @@ export default async function BillingPage({
         ))}
       </div>
 
-      <p className="mt-6 text-[12.5px] text-gray-1">
-        Downgrades and cancellations are handled in{" "}
-        {hasCustomer ? "Manage billing" : "the billing portal"} — your data and
-        history are kept.{" "}
-        <Link
-          href="/pricing"
-          className="underline underline-offset-2 hover:text-ink"
-        >
-          Compare plans
+      <div className="flex items-center justify-between border-t border-line pt-4 font-mono text-[12px] text-muted">
+        <span>Invoices &amp; tax receipts handled via Stripe Customer Portal.</span>
+        <Link href="/pricing" className="text-gray-1 underline underline-offset-2 hover:text-ink">
+          Detailed feature matrix →
         </Link>
-        .
-      </p>
+      </div>
     </div>
   );
 }
@@ -187,20 +250,18 @@ function renderCta({
   configured: boolean;
   canManage: boolean;
 }) {
-  // Current plan: no action, just a marker.
   if (plan.id === current) {
     return (
-      <span className="inline-flex w-full items-center justify-center rounded-full border border-line px-5 py-[11px] text-[15px] font-medium text-muted">
+      <span className="inline-flex w-full items-center justify-center rounded-full border border-line px-5 py-[11px] text-[14px] font-medium text-muted">
         Current plan
       </span>
     );
   }
 
-  // The Free tier is reached by cancelling in the portal, not checkout.
   if (plan.id === "free") {
     return (
       <span className="inline-flex w-full items-center justify-center rounded-full border border-line px-5 py-[11px] text-[13px] text-gray-1">
-        Cancel to downgrade
+        Cancel in portal to downgrade
       </span>
     );
   }

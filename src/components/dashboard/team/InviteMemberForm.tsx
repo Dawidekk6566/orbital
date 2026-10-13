@@ -13,7 +13,7 @@ import type { ActionResult } from "@/app/(dashboard)/actions/projects";
    ============================================================ */
 
 const INPUT =
-  "w-full rounded-[8px] border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition-colors focus:border-ink disabled:opacity-60";
+  "w-full rounded-[8px] border border-line bg-white px-3.5 py-2.5 text-[15px] text-ink outline-none transition-colors focus:border-ink focus:outline-none focus:ring-0 disabled:opacity-60";
 const LABEL = "mb-1.5 block text-[13px] font-medium text-ink-2";
 
 export function InviteMemberForm({
@@ -59,7 +59,7 @@ export function InviteMemberForm({
             name="role"
             defaultValue="member"
             disabled={disabled}
-            className={INPUT}
+            className={`${INPUT} cursor-pointer disabled:cursor-not-allowed`}
           >
             <option value="member">Member</option>
             <option value="admin">Admin</option>
